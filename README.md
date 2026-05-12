@@ -14,27 +14,30 @@ npm install oxlint-plugin-foldkit
 bun add oxlint-plugin-foldkit
 ```
 
-Register the plugin in your oxlint config:
+Register the plugin and enable the recommended category in your oxlint config:
 
 ```jsonc
 // oxlint.json
 {
-	"plugins": ["oxlint-plugin-foldkit"]
+	"plugins": ["oxlint-plugin-foldkit"],
+	"categories": {
+		"recommended": "error"
+	}
 }
 ```
 
-All rules are off by default. Opt in per rule (or per category) in your `rules` block:
+All 23 rules ship in the `recommended` category, so the snippet above turns the whole rule set on at once. To switch the severity, change `"error"` to `"warn"`.
+
+To turn an individual rule off, set it to `"off"` in the `rules` block:
 
 ```jsonc
 {
 	"plugins": ["oxlint-plugin-foldkit"],
+	"categories": {
+		"recommended": "error"
+	},
 	"rules": {
-		"foldkit/require-past-tense-message-names": "error",
-		"foldkit/command-define-pascal-const": "error",
-		"foldkit/no-hardcoded-route-strings": "error",
-		"foldkit/keyed-required-for-mapped-rows": "error",
-		"foldkit/maybe-prefix-requires-option": "error"
-		// ...
+		"foldkit/no-hand-rolled-form-controls": "off"
 	}
 }
 ```

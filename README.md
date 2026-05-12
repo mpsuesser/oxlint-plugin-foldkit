@@ -1,5 +1,7 @@
 # oxlint-plugin-foldkit
 
+[![npm](https://img.shields.io/npm/v/@mpsuesser/oxlint-plugin-foldkit)](https://www.npmjs.com/package/@mpsuesser/oxlint-plugin-foldkit)
+[![JSR](https://jsr.io/badges/@mpsuesser/oxlint-plugin-foldkit)](https://jsr.io/@mpsuesser/oxlint-plugin-foldkit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
 An opinionated [oxlint](https://oxc.rs/docs/guide/usage/linter) plugin for [Foldkit](https://github.com/foldkit/foldkit) that codifies framework conventions — message naming, command identity, view-layer accessibility, Schema shapes, and Effect-flavored idioms — as lint rules.

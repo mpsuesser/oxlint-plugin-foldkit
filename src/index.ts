@@ -84,7 +84,7 @@ const rules: Record<string, CreateRule> = {
 };
 
 export default Plugin.define({
-	name: 'foldkit',
+	name: '@mpsuesser/foldkit',
 	rules: Object.fromEntries(
 		Object.entries(rules).map(([name, rule]) => [name, recommend(rule)])
 	)

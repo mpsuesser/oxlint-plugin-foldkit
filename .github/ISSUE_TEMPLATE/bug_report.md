@@ -23,7 +23,7 @@ What actually happened. Include error messages or diagnostics output if applicab
 
 ## Environment
 
-- oxlint-plugin-foldkit version:
+- @mpsuesser/oxlint-plugin-foldkit version:
 - foldkit version:
 - effect version:
 - effect-oxlint version:

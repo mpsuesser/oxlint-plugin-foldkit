@@ -20,7 +20,7 @@ import { Diagnostic, Rule, RuleContext, Visitor } from 'effect-oxlint';
  * when the callback body references `<param>.id` — i.e. the row is
  * identity-bearing. Stateless rows over literals are passed through.
  *
- * Escape hatch: `// oxlint-disable-next-line foldkit/keyed-required-for-mapped-rows`.
+ * Escape hatch: `// oxlint-disable-next-line @mpsuesser/foldkit/keyed-required-for-mapped-rows`.
  *
  * @since 0.4.0
  */

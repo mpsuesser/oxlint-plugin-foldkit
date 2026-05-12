@@ -15,7 +15,7 @@ import { Diagnostic, Rule, RuleContext, Visitor } from 'effect-oxlint';
  * focus management, ARIA state, keyboard handling).
  *
  * The escape hatch is oxlint's native disable directive:
- * `// oxlint-disable-next-line foldkit/no-hand-rolled-form-controls -- <reason>`.
+ * `// oxlint-disable-next-line @mpsuesser/foldkit/no-hand-rolled-form-controls -- <reason>`.
  *
  * @since 0.4.0
  */
@@ -51,8 +51,8 @@ const looksLikeUiToViewCallback = (call: ESTree.CallExpression): boolean => {
 
 const messageFor = (tag: string): string =>
 	tag === 'button'
-		? 'Bare `button([...])` skips accessibility wiring. Use `Ui.Button` (which exposes a `toView` callback for custom looks), or add a `// oxlint-disable-next-line foldkit/no-hand-rolled-form-controls -- <reason>` directive to opt out. (FK-5)'
-		: `Bare \`${tag}([...])\` skips label association, validation hooks, and ARIA states. Use \`Ui.${Str.capitalize(tag)}.view\`, or add a \`// oxlint-disable-next-line foldkit/no-hand-rolled-form-controls -- <reason>\` directive to opt out. (FK-5)`;
+		? 'Bare `button([...])` skips accessibility wiring. Use `Ui.Button` (which exposes a `toView` callback for custom looks), or add a `// oxlint-disable-next-line @mpsuesser/foldkit/no-hand-rolled-form-controls -- <reason>` directive to opt out. (FK-5)'
+		: `Bare \`${tag}([...])\` skips label association, validation hooks, and ARIA states. Use \`Ui.${Str.capitalize(tag)}.view\`, or add a \`// oxlint-disable-next-line @mpsuesser/foldkit/no-hand-rolled-form-controls -- <reason>\` directive to opt out. (FK-5)`;
 
 export default Rule.define({
 	name: 'no-hand-rolled-form-controls',

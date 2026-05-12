@@ -1,17 +1,19 @@
-# oxlint-plugin-foldkit
+# @mpsuesser/oxlint-plugin-foldkit
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
 An opinionated [oxlint](https://oxc.rs/docs/guide/usage/linter) plugin for [Foldkit](https://github.com/foldkit/foldkit) that codifies framework conventions — message naming, command identity, view-layer accessibility, Schema shapes, and Effect-flavored idioms — as lint rules.
+
+> This is an unofficial, personal ruleset published under `@mpsuesser/*` so the canonical `oxlint-plugin-foldkit` / `foldkit/*` namespace remains available for the Foldkit project itself.
 
 The plugin ships **23 rules** grouped under six framework concerns (FK-1 through FK-6). Rules are implemented with the [`effect-oxlint`](https://github.com/mpsuesser/effect-oxlint) SDK and run as standard oxlint custom rules.
 
 ## Installation
 
 ```sh
-npm install oxlint-plugin-foldkit
+npm install @mpsuesser/oxlint-plugin-foldkit
 # or
-bun add oxlint-plugin-foldkit
+bun add @mpsuesser/oxlint-plugin-foldkit
 ```
 
 Register the plugin and enable the recommended category in your oxlint config:
@@ -19,7 +21,7 @@ Register the plugin and enable the recommended category in your oxlint config:
 ```jsonc
 // oxlint.json
 {
-	"plugins": ["oxlint-plugin-foldkit"],
+	"plugins": ["@mpsuesser/oxlint-plugin-foldkit"],
 	"categories": {
 		"recommended": "error"
 	}
@@ -28,16 +30,16 @@ Register the plugin and enable the recommended category in your oxlint config:
 
 All 23 rules ship in the `recommended` category, so the snippet above turns the whole rule set on at once. To switch the severity, change `"error"` to `"warn"`.
 
-To turn an individual rule off, set it to `"off"` in the `rules` block:
+To turn an individual rule off, set it to `"off"` in the `rules` block. Rules are namespaced under `@mpsuesser/foldkit/`:
 
 ```jsonc
 {
-	"plugins": ["oxlint-plugin-foldkit"],
+	"plugins": ["@mpsuesser/oxlint-plugin-foldkit"],
 	"categories": {
 		"recommended": "error"
 	},
 	"rules": {
-		"foldkit/no-hand-rolled-form-controls": "off"
+		"@mpsuesser/foldkit/no-hand-rolled-form-controls": "off"
 	}
 }
 ```
@@ -45,7 +47,7 @@ To turn an individual rule off, set it to `"off"` in the `rules` block:
 To suppress a rule at a specific call site, use oxlint's native disable directive:
 
 ```ts
-// oxlint-disable-next-line foldkit/no-hand-rolled-form-controls -- third-party widget needs raw <button>
+// oxlint-disable-next-line @mpsuesser/foldkit/no-hand-rolled-form-controls -- third-party widget needs raw <button>
 button([Ui.OnClick(Submit())], [t('Submit')]);
 ```
 
@@ -411,7 +413,7 @@ Ui.Textarea.view({ value: model.notes, onChange: UpdatedNotes });
 Spreading the attributes passed to a `Ui.*.toView` callback is permitted — that's the documented escape hatch for custom looks. For any other reason, suppress with a directive:
 
 ```ts
-// oxlint-disable-next-line foldkit/no-hand-rolled-form-controls -- third-party autocomplete library
+// oxlint-disable-next-line @mpsuesser/foldkit/no-hand-rolled-form-controls -- third-party autocomplete library
 input([Type('text'), Id('places-autocomplete')]);
 ```
 
@@ -540,11 +542,11 @@ If the value really is nullable (not optional), the rule suggests renaming to `n
 All rules respect oxlint's standard disable directives:
 
 ```ts
-// oxlint-disable-next-line foldkit/<rule-name> -- reason
+// oxlint-disable-next-line @mpsuesser/foldkit/<rule-name> -- reason
 
-/* oxlint-disable foldkit/<rule-name> -- reason */
+/* oxlint-disable @mpsuesser/foldkit/<rule-name> -- reason */
 // ... block ...
-/* oxlint-enable foldkit/<rule-name> */
+/* oxlint-enable @mpsuesser/foldkit/<rule-name> */
 ```
 
 A trailing `-- <reason>` comment is encouraged for any suppression that lives longer than a single PR review.

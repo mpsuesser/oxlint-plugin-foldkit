@@ -1,5 +1,5 @@
 {
-  "name": "@oxlint-plugin-foldkit/core",
+  "name": "@mpsuesser/oxlint-plugin-foldkit",
   "version": "0.0.0",
   "license": "MIT",
   "exports": {

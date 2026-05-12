@@ -1,4 +1,4 @@
-# @mpsuesser/oxlint-plugin-foldkit
+# oxlint-plugin-foldkit
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 

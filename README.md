@@ -51,31 +51,31 @@ button([Ui.OnClick(Submit())], [t('Submit')]);
 
 ## Rules at a glance
 
-| Group                                   | Rule                                                                                                         | What it catches                                                                |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| **FK-1** Message naming                 | [`require-past-tense-message-names`](#fk-1-1-require-past-tense-message-names)                               | Message tags that are not verb-first past tense                                |
-|                                         | [`no-changed-message-prefix`](#fk-1-2-no-changed-message-prefix)                                             | `Changed*` instead of `Updated*`                                               |
-|                                         | [`require-succeeded-failed-pair`](#fk-1-3-require-succeeded-failed-pair)                                     | `Succeeded*` without a matching `Failed*`                                      |
-|                                         | [`require-completed-mirrors-command`](#fk-1-4-require-completed-mirrors-command)                             | `Completed*` Message that doesn't mirror a local `Command.define(...)`         |
-| **FK-2** Command / construction shape   | [`command-define-pascal-const`](#fk-2-1-command-define-pascal-const)                                         | `Command.define('Foo', ...)` not bound to `const Foo`                          |
-|                                         | [`no-empty-object-tagged-call`](#fk-2-2-no-empty-object-tagged-call)                                         | `Idle({})` instead of `Idle()`                                                 |
-|                                         | [`no-spread-in-evo`](#fk-2-3-no-spread-in-evo)                                                               | `{ ...obj, x }` spread inside an `evo` updater                                 |
-|                                         | [`no-explicit-command-type-annotation`](#fk-2-4-no-explicit-command-type-annotation)                         | Redundant `: Command<...>` annotation                                          |
-| **FK-3** Effect / Option / Array idioms | [`prefer-option-match-over-map-getorelse`](#fk-3-1-prefer-option-match-over-map-getorelse)                   | `Option.map(...).pipe(Option.getOrElse(...))`                                  |
-|                                         | [`prefer-option-when-over-ternary`](#fk-3-2-prefer-option-when-over-ternary)                                 | `cond ? Option.some(x) : Option.none()`                                        |
-|                                         | [`prefer-array-fromoption-over-option-match-empty`](#fk-3-3-prefer-array-fromoption-over-option-match-empty) | `Option.match` that produces `[]` / `[v]`                                      |
-|                                         | [`no-length-comparison`](#fk-3-4-no-length-comparison)                                                       | `.length === 0` and friends                                                    |
-|                                         | [`no-effect-ignore-then-as`](#fk-3-5-no-effect-ignore-then-as)                                               | Redundant `Effect.ignore` before `Effect.as`, or on infallible primitives      |
-| **FK-4** Routing                        | [`no-hardcoded-route-strings`](#fk-4-1-no-hardcoded-route-strings)                                           | Path literals passed to `Href` / `navigateInternal` / `loadExternalUrl`        |
-| **FK-5** View / accessibility           | [`require-rel-for-external-link`](#fk-5-1-require-rel-for-external-link)                                     | `Target('_blank')` without `Rel('noopener noreferrer')`                        |
-|                                         | [`prefer-empty-over-empty-element`](#fk-5-2-prefer-empty-over-empty-element)                                 | `span([], [])` / `div([], [])`                                                 |
-|                                         | [`label-requires-for`](#fk-5-3-label-requires-for)                                                           | `label(...)` with no `For(id)`                                                 |
-|                                         | [`no-hand-rolled-form-controls`](#fk-5-4-no-hand-rolled-form-controls)                                       | Bare `input` / `textarea` / `button`                                           |
-|                                         | [`keyed-required-for-mapped-rows`](#fk-5-5-keyed-required-for-mapped-rows)                                   | `items.map((item) => li(...))` over identity-bearing rows without `keyed(...)` |
-| **FK-6** Schema / type shape            | [`require-capitalized-schema-literals`](#fk-6-1-require-capitalized-schema-literals)                         | Lowercase `Schema.Literals(['foo'])`                                           |
-|                                         | [`require-is-prefix-for-boolean-schema-field`](#fk-6-2-require-is-prefix-for-boolean-schema-field)           | `S.Boolean` field without an `is*` / `has*` / `can*` / ... prefix              |
-|                                         | [`no-array-shorthand-type`](#fk-6-3-no-array-shorthand-type)                                                 | `T[]` syntax                                                                   |
-|                                         | [`maybe-prefix-requires-option`](#fk-6-4-maybe-prefix-requires-option)                                       | `maybe*` named field that is not an `Option<T>`                                |
+| Rule                                                                                                         | What it catches                                                                |
+| ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| [`require-past-tense-message-names`](#fk-1-1-require-past-tense-message-names)                               | Message tags that are not verb-first past tense                                |
+| [`no-changed-message-prefix`](#fk-1-2-no-changed-message-prefix)                                             | `Changed*` instead of `Updated*`                                               |
+| [`require-succeeded-failed-pair`](#fk-1-3-require-succeeded-failed-pair)                                     | `Succeeded*` without a matching `Failed*`                                      |
+| [`require-completed-mirrors-command`](#fk-1-4-require-completed-mirrors-command)                             | `Completed*` Message that doesn't mirror a local `Command.define(...)`         |
+| [`command-define-pascal-const`](#fk-2-1-command-define-pascal-const)                                         | `Command.define('Foo', ...)` not bound to `const Foo`                          |
+| [`no-empty-object-tagged-call`](#fk-2-2-no-empty-object-tagged-call)                                         | `Idle({})` instead of `Idle()`                                                 |
+| [`no-spread-in-evo`](#fk-2-3-no-spread-in-evo)                                                               | `{ ...obj, x }` spread inside an `evo` updater                                 |
+| [`no-explicit-command-type-annotation`](#fk-2-4-no-explicit-command-type-annotation)                         | Redundant `: Command<...>` annotation                                          |
+| [`prefer-option-match-over-map-getorelse`](#fk-3-1-prefer-option-match-over-map-getorelse)                   | `Option.map(...).pipe(Option.getOrElse(...))`                                  |
+| [`prefer-option-when-over-ternary`](#fk-3-2-prefer-option-when-over-ternary)                                 | `cond ? Option.some(x) : Option.none()`                                        |
+| [`prefer-array-fromoption-over-option-match-empty`](#fk-3-3-prefer-array-fromoption-over-option-match-empty) | `Option.match` that produces `[]` / `[v]`                                      |
+| [`no-length-comparison`](#fk-3-4-no-length-comparison)                                                       | `.length === 0` and friends                                                    |
+| [`no-effect-ignore-then-as`](#fk-3-5-no-effect-ignore-then-as)                                               | Redundant `Effect.ignore` before `Effect.as`, or on infallible primitives      |
+| [`no-hardcoded-route-strings`](#fk-4-1-no-hardcoded-route-strings)                                           | Path literals passed to `Href` / `navigateInternal` / `loadExternalUrl`        |
+| [`require-rel-for-external-link`](#fk-5-1-require-rel-for-external-link)                                     | `Target('_blank')` without `Rel('noopener noreferrer')`                        |
+| [`prefer-empty-over-empty-element`](#fk-5-2-prefer-empty-over-empty-element)                                 | `span([], [])` / `div([], [])`                                                 |
+| [`label-requires-for`](#fk-5-3-label-requires-for)                                                           | `label(...)` with no `For(id)`                                                 |
+| [`no-hand-rolled-form-controls`](#fk-5-4-no-hand-rolled-form-controls)                                       | Bare `input` / `textarea` / `button`                                           |
+| [`keyed-required-for-mapped-rows`](#fk-5-5-keyed-required-for-mapped-rows)                                   | `items.map((item) => li(...))` over identity-bearing rows without `keyed(...)` |
+| [`require-capitalized-schema-literals`](#fk-6-1-require-capitalized-schema-literals)                         | Lowercase `Schema.Literals(['foo'])`                                           |
+| [`require-is-prefix-for-boolean-schema-field`](#fk-6-2-require-is-prefix-for-boolean-schema-field)           | `S.Boolean` field without an `is*` / `has*` / `can*` / ... prefix              |
+| [`no-array-shorthand-type`](#fk-6-3-no-array-shorthand-type)                                                 | `T[]` syntax                                                                   |
+| [`maybe-prefix-requires-option`](#fk-6-4-maybe-prefix-requires-option)                                       | `maybe*` named field that is not an `Option<T>`                                |
 
 ---
 

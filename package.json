@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.schemastore.org/package.json",
   "name": "@mpsuesser/oxlint-plugin-foldkit",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Oxlint JS plugin enforcing Foldkit framework conventions",
   "keywords": [
     "eslint",

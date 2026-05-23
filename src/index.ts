@@ -64,15 +64,15 @@ const rules: Record<string, CreateRule> = {
 	'maybe-prefix-requires-option': maybePrefixRequiresOption
 };
 
+/**
+ * Oxlint plugin for Foldkit conventions and generated config presets.
+ *
+ * @since 0.2.2
+ */
 const plugin: Plugin.DefinedPlugin<Record<string, CreateRule>> = Plugin.define({
 	name: '@mpsuesser/foldkit',
 	specifier: '@mpsuesser/oxlint-plugin-foldkit',
 	rules
 });
 
-/**
- * Oxlint plugin for Foldkit conventions and generated config presets.
- *
- * @since 0.2.1
- */
 export default plugin;

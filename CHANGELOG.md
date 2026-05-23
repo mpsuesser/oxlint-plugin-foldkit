@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.2.2 — JSR default export docs
+
+### Fixed
+
+- Attached JSR symbol documentation to the exported plugin value so the generated docs no longer show the default export as undocumented.
+
 ## 0.2.1 — JSR score improvements
 
 ### Changed

@@ -8,7 +8,7 @@
 
 - Removed JSR slow-type diagnostics by giving each rule module an explicit `CreateRule` export boundary.
 - Documented the default plugin export for generated JSR symbol docs.
-- Updated the JSR publish workflow to publish with provenance without `--allow-slow-types`.
+- Updated the JSR publish workflow to pass fast-check and rely on GitHub Actions provenance without `--allow-slow-types`.
 
 ## 0.2.0 — Generated config presets
 

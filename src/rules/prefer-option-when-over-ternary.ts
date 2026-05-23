@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import { Match } from 'effect';
@@ -47,7 +48,7 @@ const messageFor = (shape: TernaryShape): string =>
 		Match.exhaustive
 	);
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'prefer-option-when-over-ternary',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -67,3 +68,5 @@ export default Rule.define({
 		);
 	}
 });
+
+export default rule;

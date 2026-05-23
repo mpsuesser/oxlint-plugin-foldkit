@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import { pipe } from 'effect';
@@ -43,7 +44,7 @@ const hasRel = (arr: ESTree.ArrayExpression): boolean =>
 		Arr.some((el) => el !== null && isRelCall(el))
 	);
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'require-rel-for-external-link',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -71,3 +72,5 @@ export default Rule.define({
 		);
 	}
 });
+
+export default rule;

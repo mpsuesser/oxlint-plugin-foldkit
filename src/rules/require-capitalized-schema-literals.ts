@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import { pipe } from 'effect';
@@ -62,7 +63,7 @@ const findings = (arr: ESTree.ArrayExpression): ReadonlyArray<LiteralFinding> =>
 		})
 	);
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'require-capitalized-schema-literals',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -89,3 +90,5 @@ export default Rule.define({
 		});
 	}
 });
+
+export default rule;

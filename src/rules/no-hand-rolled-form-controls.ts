@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import { pipe } from 'effect';
@@ -54,7 +55,7 @@ const messageFor = (tag: string): string =>
 		? 'Bare `button([...])` skips accessibility wiring. Use `Ui.Button` (which exposes a `toView` callback for custom looks), or add a `// oxlint-disable-next-line @mpsuesser/foldkit/no-hand-rolled-form-controls -- <reason>` directive to opt out. (FK-5)'
 		: `Bare \`${tag}([...])\` skips label association, validation hooks, and ARIA states. Use \`Ui.${Str.capitalize(tag)}.view\`, or add a \`// oxlint-disable-next-line @mpsuesser/foldkit/no-hand-rolled-form-controls -- <reason>\` directive to opt out. (FK-5)`;
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'no-hand-rolled-form-controls',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -81,3 +82,5 @@ export default Rule.define({
 		);
 	}
 });
+
+export default rule;

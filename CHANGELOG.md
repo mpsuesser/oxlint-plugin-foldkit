@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.2.1 — JSR score improvements
+
+### Changed
+
+- Removed JSR slow-type diagnostics by giving each rule module an explicit `CreateRule` export boundary.
+- Documented the default plugin export for generated JSR symbol docs.
+- Updated the JSR publish workflow to publish with provenance without `--allow-slow-types`.
+
+## 0.2.0 — Generated config presets
+
 ### Changed
 
 - Published package exports now point at built `dist/` files instead of raw TypeScript source, so oxlint can load the plugin from `node_modules` without Node type-stripping failures.

@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import { pipe } from 'effect';
@@ -57,7 +58,7 @@ const hasTwoEmptyArrayArgs = (call: ESTree.CallExpression): boolean => {
 	);
 };
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'prefer-empty-over-empty-element',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -87,3 +88,5 @@ export default Rule.define({
 		);
 	}
 });
+
+export default rule;

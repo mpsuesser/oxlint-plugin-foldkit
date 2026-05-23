@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import { pipe } from 'effect';
@@ -144,7 +145,7 @@ const matchBranches = (
 		Option.orElse(() => matchBranchesFromPipedCall(call))
 	);
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'prefer-array-fromoption-over-option-match-empty',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -172,3 +173,5 @@ export default Rule.define({
 		);
 	}
 });
+
+export default rule;

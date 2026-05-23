@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import { Plugin } from 'effect-oxlint';
 
 import commandDefinePascalConst from './rules/command-define-pascal-const.ts';
@@ -24,7 +25,7 @@ import requirePastTenseMessageNames from './rules/require-past-tense-message-nam
 import requireRelForExternalLink from './rules/require-rel-for-external-link.ts';
 import requireSucceededFailedPair from './rules/require-succeeded-failed-pair.ts';
 
-const rules = {
+const rules: Record<string, CreateRule> = {
 	// ── Message naming (FK-1) ────────────────────────────────
 	'require-past-tense-message-names': requirePastTenseMessageNames,
 	'no-changed-message-prefix': noChangedMessagePrefix,
@@ -63,8 +64,15 @@ const rules = {
 	'maybe-prefix-requires-option': maybePrefixRequiresOption
 };
 
-export default Plugin.define({
+const plugin: Plugin.DefinedPlugin<Record<string, CreateRule>> = Plugin.define({
 	name: '@mpsuesser/foldkit',
 	specifier: '@mpsuesser/oxlint-plugin-foldkit',
 	rules
 });
+
+/**
+ * Oxlint plugin for Foldkit conventions and generated config presets.
+ *
+ * @since 0.2.1
+ */
+export default plugin;

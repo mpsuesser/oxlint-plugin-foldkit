@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import * as Bool from 'effect/Boolean';
@@ -35,7 +36,7 @@ const lengthAgainstZero = (bin: ESTree.BinaryExpression): boolean => {
 	return (leftLen && rightZero) || (leftZero && rightLen);
 };
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'no-length-comparison',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -63,3 +64,5 @@ export default Rule.define({
 		);
 	}
 });
+
+export default rule;

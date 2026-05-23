@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import { pipe } from 'effect';
@@ -137,7 +138,7 @@ const callbackBodyReferencesId = (
 
 // ── Rule ───────────────────────────────────────────────────────────────────
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'keyed-required-for-mapped-rows',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -177,3 +178,5 @@ export default Rule.define({
 		);
 	}
 });
+
+export default rule;

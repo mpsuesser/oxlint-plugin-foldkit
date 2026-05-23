@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import { pipe } from 'effect';
@@ -49,7 +50,7 @@ const matchesFreestandingPipeForm = (call: ESTree.CallExpression): boolean => {
 	);
 };
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'prefer-option-match-over-map-getorelse',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -74,3 +75,5 @@ export default Rule.define({
 		});
 	}
 });
+
+export default rule;

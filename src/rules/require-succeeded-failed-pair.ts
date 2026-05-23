@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import { Match, pipe } from 'effect';
@@ -80,7 +81,7 @@ const extractMention = (node: ESTree.Node): Option.Option<MessageMention> => {
 	);
 };
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'require-succeeded-failed-pair',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -130,3 +131,5 @@ export default Rule.define({
 		);
 	}
 });
+
+export default rule;

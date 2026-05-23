@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import { Match, pipe } from 'effect';
@@ -95,7 +96,7 @@ const partitionMentions = (items: ReadonlyArray<Mention>): Partitioned => ({
 	)
 });
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'require-completed-mirrors-command',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -135,3 +136,5 @@ export default Rule.define({
 		);
 	}
 });
+
+export default rule;

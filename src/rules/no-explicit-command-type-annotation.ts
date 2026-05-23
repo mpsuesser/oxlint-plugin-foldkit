@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import * as Effect from 'effect/Effect';
@@ -9,7 +10,7 @@ const isCommandTypeRefWithArguments = (node: ESTree.TSTypeReference): boolean =>
 	node.typeName.name === 'Command' &&
 	node.typeArguments !== null;
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'no-explicit-command-type-annotation',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -31,3 +32,5 @@ export default Rule.define({
 		);
 	}
 });
+
+export default rule;

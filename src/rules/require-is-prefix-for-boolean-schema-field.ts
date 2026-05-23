@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import { pipe } from 'effect';
@@ -60,7 +61,7 @@ const fieldsArg = (
 		: undefined;
 };
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'require-is-prefix-for-boolean-schema-field',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -87,3 +88,5 @@ export default Rule.define({
 		});
 	}
 });
+
+export default rule;

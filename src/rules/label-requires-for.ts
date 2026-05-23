@@ -1,3 +1,4 @@
+import type { CreateRule } from '@oxlint/plugins';
 import type { ESTree } from 'effect-oxlint';
 
 import { pipe } from 'effect';
@@ -40,7 +41,7 @@ const hasFor = (arr: ESTree.ArrayExpression): boolean =>
 		Arr.some((el) => P.isNotNull(el) && isForCall(el))
 	);
 
-export default Rule.define({
+const rule: CreateRule = Rule.define({
 	name: 'label-requires-for',
 	meta: Rule.meta({
 		type: 'suggestion',
@@ -69,3 +70,5 @@ export default Rule.define({
 		});
 	}
 });
+
+export default rule;

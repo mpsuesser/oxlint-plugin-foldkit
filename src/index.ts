@@ -1,5 +1,3 @@
-import type { CreateRule } from '@oxlint/plugins';
-
 import { Plugin } from 'effect-oxlint';
 
 import commandDefinePascalConst from './rules/command-define-pascal-const.ts';
@@ -26,25 +24,7 @@ import requirePastTenseMessageNames from './rules/require-past-tense-message-nam
 import requireRelForExternalLink from './rules/require-rel-for-external-link.ts';
 import requireSucceededFailedPair from './rules/require-succeeded-failed-pair.ts';
 
-/**
- * Mark a rule as part of the plugin's recommended set.
- *
- * Users can then enable every Foldkit rule at once via
- * `"categories": { "recommended": "error" }` in `oxlint.json`, instead of
- * having to list each rule individually.
- */
-const recommend = (rule: CreateRule): CreateRule => ({
-	...rule,
-	meta: {
-		...rule.meta,
-		docs: {
-			...rule.meta?.docs,
-			recommended: true
-		}
-	}
-});
-
-const rules: Record<string, CreateRule> = {
+const rules = {
 	// ── Message naming (FK-1) ────────────────────────────────
 	'require-past-tense-message-names': requirePastTenseMessageNames,
 	'no-changed-message-prefix': noChangedMessagePrefix,
@@ -85,7 +65,6 @@ const rules: Record<string, CreateRule> = {
 
 export default Plugin.define({
 	name: '@mpsuesser/foldkit',
-	rules: Object.fromEntries(
-		Object.entries(rules).map(([name, rule]) => [name, recommend(rule)])
-	)
+	specifier: '@mpsuesser/oxlint-plugin-foldkit',
+	rules
 });

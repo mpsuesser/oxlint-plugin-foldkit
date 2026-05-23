@@ -18,40 +18,46 @@ npm install @mpsuesser/oxlint-plugin-foldkit
 bun add @mpsuesser/oxlint-plugin-foldkit
 ```
 
-Register the plugin and enable the recommended category in your oxlint config:
-
-```jsonc
-// oxlint.json
-{
-	"plugins": ["@mpsuesser/oxlint-plugin-foldkit"],
-	"categories": {
-		"recommended": "error"
-	}
-}
-```
-
-All 23 rules ship in the `recommended` category, so the snippet above turns the whole rule set on at once. To switch the severity, change `"error"` to `"warn"`.
-
-To turn an individual rule off, set it to `"off"` in the `rules` block. Rules are namespaced under `@mpsuesser/foldkit/`:
-
-```jsonc
-{
-	"plugins": ["@mpsuesser/oxlint-plugin-foldkit"],
-	"categories": {
-		"recommended": "error"
-	},
-	"rules": {
-		"@mpsuesser/foldkit/no-hand-rolled-form-controls": "off"
-	}
-}
-```
-
-To suppress a rule at a specific call site, use oxlint's native disable directive:
+Use the generated recommended config from `oxlint.config.ts`:
 
 ```ts
-// oxlint-disable-next-line @mpsuesser/foldkit/no-hand-rolled-form-controls -- third-party widget needs raw <button>
-button([Ui.OnClick(Submit())], [t('Submit')]);
+import { defineConfig } from 'oxlint';
+import foldkit from '@mpsuesser/oxlint-plugin-foldkit';
+
+export default defineConfig({
+	extends: [foldkit.configs.recommended]
+});
 ```
+
+`configs.recommended` registers the package through oxlint's `jsPlugins` field and enables all 23 rules at `error` severity.
+
+To override an individual rule, add a `rules` entry after the `extends` block:
+
+```ts
+import { defineConfig } from 'oxlint';
+import foldkit from '@mpsuesser/oxlint-plugin-foldkit';
+
+export default defineConfig({
+	extends: [foldkit.configs.recommended],
+	rules: {
+		'@mpsuesser/foldkit/no-hand-rolled-form-controls': 'off',
+		'@mpsuesser/foldkit/no-length-comparison': 'warn'
+	}
+});
+```
+
+If you use `.oxlintrc.json`, oxlint cannot import a package config object. Configure the JS plugin and any rules you want explicitly:
+
+```jsonc
+{
+	"jsPlugins": ["@mpsuesser/oxlint-plugin-foldkit"],
+	"rules": {
+		"@mpsuesser/foldkit/no-length-comparison": "error"
+	}
+}
+```
+
+Use `oxlint.config.ts` when you want the full generated recommended config.
 
 ## Rules at a glance
 

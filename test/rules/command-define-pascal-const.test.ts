@@ -40,6 +40,40 @@ const buildCall = (opts: {
 	return call;
 };
 
+/**
+ * Build Foldkit's canonical curried form
+ * `const <declaratorName> = Command.define(name, payload, ctor)(handler)`.
+ *
+ * Returns the inner `Command.define(...)` call (the node the rule matches via
+ * `AST.isCallOf`). Its parent is the outer application call, whose parent is the
+ * `VariableDeclarator` — mirroring the real AST shape.
+ */
+const buildCurriedCall = (opts: {
+	readonly arg0?: unknown;
+	readonly declaratorName?: string;
+}): MutableNode => {
+	const inner: MutableNode = {
+		type: 'CallExpression',
+		callee: Testing.memberExpr('Command', 'define'),
+		arguments: opts.arg0 === undefined ? [] : [opts.arg0]
+	};
+	const outer: MutableNode = {
+		type: 'CallExpression',
+		callee: inner,
+		arguments: []
+	};
+	inner.parent = outer;
+	if (opts.declaratorName !== undefined) {
+		const declarator: MutableNode = {
+			type: 'VariableDeclarator',
+			id: Testing.id(opts.declaratorName),
+			init: outer
+		};
+		outer.parent = declarator;
+	}
+	return inner;
+};
+
 describe('command-define-pascal-const', () => {
 	// ── happy path ───────────────────────────────────────────
 	it('does not flag `const FetchWeather = Command.define("FetchWeather", ...)`', () => {
@@ -48,6 +82,35 @@ describe('command-define-pascal-const', () => {
 			declaratorName: 'FetchWeather'
 		});
 		expect(Testing.runRule(rule, 'CallExpression', node)).toHaveLength(0);
+	});
+
+	it('does not flag curried `const NavigateInternal = Command.define("NavigateInternal", payload, ctor)(handler)`', () => {
+		const node = buildCurriedCall({
+			arg0: Testing.strLiteral('NavigateInternal'),
+			declaratorName: 'NavigateInternal'
+		});
+		expect(Testing.runRule(rule, 'CallExpression', node)).toHaveLength(0);
+	});
+
+	it('flags curried const-name mismatch `const Foo = Command.define("Bar", ...)(handler)`', () => {
+		const node = buildCurriedCall({
+			arg0: Testing.strLiteral('Bar'),
+			declaratorName: 'Foo'
+		});
+		const result = Testing.runRule(rule, 'CallExpression', node);
+		expect(result).toHaveLength(1);
+		expect(result[0]?.diagnostic.message).toContain(
+			'mirror the Command identity'
+		);
+	});
+
+	it('flags inline curried `Command.define("Foo", ...)(handler)` (no enclosing declarator)', () => {
+		const node = buildCurriedCall({ arg0: Testing.strLiteral('Foo') });
+		const result = Testing.runRule(rule, 'CallExpression', node);
+		expect(result).toHaveLength(1);
+		expect(result[0]?.diagnostic.message).toContain(
+			'must be assigned to a PascalCase'
+		);
 	});
 
 	// ── name shape ───────────────────────────────────────────

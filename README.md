@@ -4,11 +4,11 @@
 [![JSR](https://jsr.io/badges/@mpsuesser/oxlint-plugin-foldkit)](https://jsr.io/@mpsuesser/oxlint-plugin-foldkit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-An opinionated [oxlint](https://oxc.rs/docs/guide/usage/linter) plugin for [Foldkit](https://github.com/foldkit/foldkit) that codifies framework conventions — message naming, command identity, view-layer accessibility, Schema shapes, and Effect-flavored idioms — as lint rules.
+An opinionated [oxlint](https://oxc.rs/docs/guide/usage/linter) plugin for [Foldkit](https://github.com/foldkit/foldkit) that codifies framework conventions — message naming, command identity, routing, view-layer accessibility, and Foldkit-specific type-shape conventions — as lint rules.
 
 > This is an unofficial, personal ruleset published under `@mpsuesser/*` so the canonical `oxlint-plugin-foldkit` / `foldkit/*` namespace remains available for the Foldkit project itself.
 
-The plugin ships **23 rules** grouped under six framework concerns (FK-1 through FK-6). Rules are implemented with the [`effect-oxlint`](https://github.com/mpsuesser/effect-oxlint) SDK and run as standard oxlint custom rules.
+The plugin ships **16 rules** grouped under six framework concerns (FK-1 through FK-6). Rules are implemented with the [`effect-oxlint`](https://github.com/mpsuesser/effect-oxlint) SDK and run as standard oxlint custom rules.
 
 ## Installation
 
@@ -29,7 +29,7 @@ export default defineConfig({
 });
 ```
 
-`configs.recommended` registers the package through oxlint's `jsPlugins` field and enables all 23 rules at `error` severity.
+`configs.recommended` registers the package through oxlint's `jsPlugins` field and enables all 16 rules at `error` severity.
 
 To override an individual rule, add a `rules` entry after the `extends` block:
 
@@ -41,7 +41,7 @@ export default defineConfig({
 	extends: [foldkit.configs.recommended],
 	rules: {
 		'@mpsuesser/foldkit/no-hand-rolled-form-controls': 'off',
-		'@mpsuesser/foldkit/no-length-comparison': 'warn'
+		'@mpsuesser/foldkit/no-hand-rolled-form-controls': 'warn'
 	}
 });
 ```
@@ -52,7 +52,7 @@ If you use `.oxlintrc.json`, oxlint cannot import a package config object. Confi
 {
 	"jsPlugins": ["@mpsuesser/oxlint-plugin-foldkit"],
 	"rules": {
-		"@mpsuesser/foldkit/no-length-comparison": "error"
+		"@mpsuesser/foldkit/no-hand-rolled-form-controls": "error"
 	}
 }
 ```
@@ -64,7 +64,7 @@ Use `oxlint.config.ts` when you want the full generated recommended config.
 | Rule                                                                                                         | What it catches                                                                |
 | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
 | [`require-past-tense-message-names`](#fk-1-1-require-past-tense-message-names)                               | Message tags that are not verb-first past tense                                |
-| [`no-changed-message-prefix`](#fk-1-2-no-changed-message-prefix)                                             | `Changed*` instead of `Updated*`                                               |
+| [`no-changed-message-prefix`](#fk-1-2-no-changed-message-prefix)                                             | `Changed*` instead of `Updated*`, except `ChangedRoute` / `ChangedUrl`         |
 | [`require-succeeded-failed-pair`](#fk-1-3-require-succeeded-failed-pair)                                     | `Succeeded*` without a matching `Failed*`                                      |
 | [`require-completed-mirrors-command`](#fk-1-4-require-completed-mirrors-command)                             | `Completed*` Message that doesn't mirror a local `Command.define(...)`         |
 | [`command-define-pascal-const`](#fk-2-1-command-define-pascal-const)                                         | `Command.define('Foo', ...)` not bound to `const Foo`                          |
@@ -72,20 +72,13 @@ Use `oxlint.config.ts` when you want the full generated recommended config.
 | [`no-spread-in-evo`](#fk-2-3-no-spread-in-evo)                                                               | `{ ...obj, x }` spread inside an `evo` updater                                 |
 | [`no-explicit-command-type-annotation`](#fk-2-4-no-explicit-command-type-annotation)                         | Redundant `: Command<...>` annotation                                          |
 | [`prefer-option-match-over-map-getorelse`](#fk-3-1-prefer-option-match-over-map-getorelse)                   | `Option.map(...).pipe(Option.getOrElse(...))`                                  |
-| [`prefer-option-when-over-ternary`](#fk-3-2-prefer-option-when-over-ternary)                                 | `cond ? Option.some(x) : Option.none()`                                        |
-| [`prefer-array-fromoption-over-option-match-empty`](#fk-3-3-prefer-array-fromoption-over-option-match-empty) | `Option.match` that produces `[]` / `[v]`                                      |
-| [`no-length-comparison`](#fk-3-4-no-length-comparison)                                                       | `.length === 0` and friends                                                    |
-| [`no-effect-ignore-then-as`](#fk-3-5-no-effect-ignore-then-as)                                               | Redundant `Effect.ignore` before `Effect.as`, or on infallible primitives      |
 | [`no-hardcoded-route-strings`](#fk-4-1-no-hardcoded-route-strings)                                           | Path literals passed to `Href` / `navigateInternal` / `loadExternalUrl`        |
 | [`require-rel-for-external-link`](#fk-5-1-require-rel-for-external-link)                                     | `Target('_blank')` without `Rel('noopener noreferrer')`                        |
 | [`prefer-empty-over-empty-element`](#fk-5-2-prefer-empty-over-empty-element)                                 | `span([], [])` / `div([], [])`                                                 |
 | [`label-requires-for`](#fk-5-3-label-requires-for)                                                           | `label(...)` with no `For(id)`                                                 |
 | [`no-hand-rolled-form-controls`](#fk-5-4-no-hand-rolled-form-controls)                                       | Bare `input` / `textarea` / `button`                                           |
 | [`keyed-required-for-mapped-rows`](#fk-5-5-keyed-required-for-mapped-rows)                                   | `items.map((item) => li(...))` over identity-bearing rows without `keyed(...)` |
-| [`require-capitalized-schema-literals`](#fk-6-1-require-capitalized-schema-literals)                         | Lowercase `Schema.Literals(['foo'])`                                           |
-| [`require-is-prefix-for-boolean-schema-field`](#fk-6-2-require-is-prefix-for-boolean-schema-field)           | `S.Boolean` field without an `is*` / `has*` / `can*` / ... prefix              |
-| [`no-array-shorthand-type`](#fk-6-3-no-array-shorthand-type)                                                 | `T[]` syntax                                                                   |
-| [`maybe-prefix-requires-option`](#fk-6-4-maybe-prefix-requires-option)                                       | `maybe*` named field that is not an `Option<T>`                                |
+| [`no-array-shorthand-type`](#fk-6-1-no-array-shorthand-type)                                                 | `T[]` syntax                                                                   |
 
 ---
 
@@ -108,11 +101,11 @@ type Msg =
 type Msg = { _tag: 'LoadedUser' } | { _tag: 'Saved' } | { _tag: 'ClickedUser' };
 ```
 
-The allow-listed prefixes are: `Loaded`, `Clicked`, `Submitted`, `Updated`, `Saved`, `Deleted`, `Created`, `Selected`, `Toggled`, `Opened`, `Closed`, `Failed`, `Succeeded`, `Completed`, `Started`, `Stopped`, `Pressed`, `Typed`, `Focused`, `Blurred`, `Hovered`, `Dropped`, `Dragged`, `Scrolled`, `Resized`, `Received`, `Sent`, `Initialized`, `Tick`, `Got`, `Returned`.
+The allow-listed prefixes include verbs such as `Applied`, `Loaded`, `Clicked`, `Submitted`, `Updated`, `Saved`, `Deleted`, `Created`, `Selected`, `Toggled`, `Opened`, `Closed`, `Failed`, `Succeeded`, `Completed`, `Started`, `Stopped`, `Pressed`, `Typed`, `Focused`, `Blurred`, `Hovered`, `Dropped`, `Dragged`, `Scrolled`, `Resized`, `Received`, `Sent`, `Initialized`, `Tick`, `Got`, and `Returned`.
 
 ### FK-1.2 · `no-changed-message-prefix`
 
-`Changed*` is split across two intents — DOM-input changes and external state updates — both of which Foldkit collapses under `Updated*`.
+`Changed*` is split across two intents — DOM-input changes and external state updates — both of which Foldkit usually collapses under `Updated*`. Route and URL events are the exception: `ChangedRoute` and `ChangedUrl` describe navigation facts, so the rule allows those two tags.
 
 ```ts
 // ❌
@@ -225,9 +218,9 @@ const FetchUser = Command.define('FetchUser', fetchUserEffect);
 
 ---
 
-## FK-3 · Effect, Option, and Array idioms
+## FK-3 · Option idiom
 
-Five rules that flag fluent patterns where Foldkit's exemplars consistently prefer a more direct combinator.
+One rule that flags a fluent Option pattern where Foldkit's exemplars consistently prefer a more direct combinator.
 
 ### FK-3.1 · `prefer-option-match-over-map-getorelse`
 
@@ -245,87 +238,6 @@ const label = Option.match(maybeUser, {
 	onNone: () => 'Guest',
 	onSome: (u) => u.name
 });
-```
-
-### FK-3.2 · `prefer-option-when-over-ternary`
-
-Ternary expressions that branch into `Option.some` / `Option.none` are exactly what `Option.when` (or `Option.unless`) expresses.
-
-```ts
-// ❌
-const maybeName = user.isAdmin ? Option.some(user.name) : Option.none();
-
-const maybeName = !user.isBlocked ? Option.some(user.name) : Option.none();
-
-// ✅
-const maybeName = Option.when(user.isAdmin, () => user.name);
-const maybeName = Option.unless(user.isBlocked, () => user.name);
-```
-
-### FK-3.3 · `prefer-array-fromoption-over-option-match-empty`
-
-`Option<A>` → `Array<A>` is `Array.fromOption`. Spelling that as `Option.match` with `[]` / `[v]` branches obscures the intent.
-
-```ts
-// ❌
-const items = Option.match(maybeUser, {
-	onNone: () => [],
-	onSome: (u) => [u]
-});
-
-// ✅
-const items = Array.fromOption(maybeUser);
-```
-
-### FK-3.4 · `no-length-comparison`
-
-`.length === 0` (and the various `> 0`, `!== 0`, `>= 1` variants) over-indexes on JavaScript's array shape. Use the named predicates so the intent is on the page.
-
-```ts
-// ❌
-if (users.length === 0) return placeholder;
-if (name.length > 0) submit(name);
-if (xs.length !== 0) {
-	/* ... */
-}
-
-// ✅
-if (Array.isEmptyArray(users)) return placeholder;
-if (String.isNonEmpty(name)) submit(name);
-if (Array.isNonEmptyArray(xs)) {
-	/* ... */
-}
-
-// For branching:
-Array.match(xs, {
-	onEmpty: () => placeholder,
-	onNonEmpty: (items) => list(items)
-});
-```
-
-### FK-3.5 · `no-effect-ignore-then-as`
-
-`Effect.ignore` discards both the success value and the error channel. Two common misuses:
-
-- **Adjacent to `Effect.as`** — `as` already discards the success, so `ignore` only erases the errors silently.
-- **On an infallible primitive** (`Effect.succeed`, `Effect.sync`, `Effect.void`, etc.) — there's nothing to ignore.
-
-```ts
-// ❌
-const program = pipe(fetchUser(id), Effect.ignore, Effect.as('done'));
-
-// ❌  Effect.succeed cannot fail; Effect.ignore is a no-op.
-const ready = pipe(Effect.succeed(42), Effect.ignore);
-
-// ✅  Either drop the ignore (if infallible)…
-const program = pipe(fetchUser(id), Effect.as('done'));
-
-// …or handle errors explicitly.
-const program = pipe(
-	fetchUser(id),
-	Effect.catchAll(() => Effect.void),
-	Effect.as('done')
-);
 ```
 
 ---
@@ -460,45 +372,11 @@ Row tags considered "identity-bearing" by the rule: `li`, `div`, `tr`, `article`
 
 ---
 
-## FK-6 · Schema and type shape
+## FK-6 · Type shape
 
-Four rules that enforce Foldkit's conventions for Schema field naming and TypeScript type-shape preferences.
+One rule that enforces Foldkit's TypeScript type-shape preference.
 
-### FK-6.1 · `require-capitalized-schema-literals`
-
-Schema literals are rendered in error messages and API responses. Capitalizing them at the source removes a class of cosmetic display bugs and keeps tag values consistent with how they're named in code.
-
-```ts
-// ❌
-const Status = Schema.Literals(['pending', 'active', 'archived']);
-
-// ✅
-const Status = Schema.Literals(['Pending', 'Active', 'Archived']);
-```
-
-### FK-6.2 · `require-is-prefix-for-boolean-schema-field`
-
-Boolean fields read better when their name is a predicate: `isActive`, `hasPaid`, `canEdit`. Naked nouns (`active`, `paid`, `edit`) are ambiguous at the call site.
-
-```ts
-// ❌
-const User = Schema.Struct({
-	active: Schema.Boolean,
-	paid: Schema.Boolean,
-	edit: Schema.Boolean
-});
-
-// ✅
-const User = Schema.Struct({
-	isActive: Schema.Boolean,
-	hasPaid: Schema.Boolean,
-	canEdit: Schema.Boolean
-});
-```
-
-Allowed prefixes: `is*`, `has*`, `can*`, `should*`, `was*`, `will*`.
-
-### FK-6.3 · `no-array-shorthand-type`
+### FK-6.1 · `no-array-shorthand-type`
 
 `T[]` and `Array<T>` are equivalent to TypeScript, but Foldkit consistently uses the generic form (and `ReadonlyArray<T>` for read-only). This keeps `readonly` upgrades a one-character change instead of a syntax migration.
 
@@ -515,33 +393,6 @@ type ReadonlyUsers = ReadonlyArray<User>;
 
 function names(users: ReadonlyArray<User>): Array<string> { ... }
 ```
-
-### FK-6.4 · `maybe-prefix-requires-option`
-
-A field named `maybeX` is a contract that the value is an `Option<X>`. Using the prefix with a plain `T | null` (or a `S.optional` field) breaks reader expectations.
-
-```ts
-// ❌  TS: maybeName is not Option<…>
-function greet(maybeName: string | null) { ... }
-function greet(maybeName: string | undefined) { ... }
-
-// ❌  Schema: maybeAvatar is S.optional, not S.Option
-const User = Schema.Struct({
-	maybeAvatar: Schema.optional(Schema.String)
-});
-
-// ✅  TS
-function greet(maybeName: Option<string>) { ... }
-
-// ✅  Schema
-const User = Schema.Struct({
-	maybeAvatar: Schema.Option(Schema.String),
-	// or, for wire formats that send `null`:
-	maybeAvatar: Schema.OptionFromNullishOr(Schema.String)
-});
-```
-
-If the value really is nullable (not optional), the rule suggests renaming to `nullableX` instead.
 
 ---
 
@@ -563,7 +414,7 @@ A trailing `-- <reason>` comment is encouraged for any suppression that lives lo
 
 ```sh
 bun install
-bun test          # run the test suite (224 tests across 23 rules)
+bun test          # run the test suite (168 tests across 16 rules)
 bun run typecheck # tsgo
 bun run check     # format + lint
 ```

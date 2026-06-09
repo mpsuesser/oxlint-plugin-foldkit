@@ -53,10 +53,38 @@ const declaratorName = (
 		? Option.some(declarator.id.name)
 		: Option.none();
 
+/**
+ * Find the `Command.define(...)` call that heads a declarator's init,
+ * descending through any curried application calls. Foldkit's canonical
+ * signature is curried — `Command.define(name, payload, SuccessCtor)(handler)`
+ * — so the declarator's `init` is the outermost application call, not the
+ * `Command.define(...)` call itself.
+ */
+const initCommandDefineCall = (
+	init: ESTree.Node | null | undefined
+): Option.Option<ESTree.CallExpression> => {
+	if (init === null || init === undefined || init.type !== 'CallExpression') {
+		return Option.none();
+	}
+	if (AST.isCallOf(init, 'Command', 'define')) return Option.some(init);
+	return init.callee.type === 'CallExpression'
+		? initCommandDefineCall(init.callee)
+		: Option.none();
+};
+
+/**
+ * True when `node` is the `Command.define(...)` call that heads `declarator`'s
+ * init — whether assigned directly (`const X = Command.define(...)`) or through
+ * curried application (`const X = Command.define(...)(handler)`).
+ */
 const isImmediateInitOf = (
 	declarator: ESTree.VariableDeclarator,
 	node: ESTree.CallExpression
-): boolean => declarator.init === node;
+): boolean =>
+	Option.match(initCommandDefineCall(declarator.init), {
+		onNone: () => false,
+		onSome: (call) => call === node
+	});
 
 const diagnoseFromName = (
 	node: ESTree.CallExpression,

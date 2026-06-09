@@ -15,27 +15,94 @@ import { Diagnostic, Rule, RuleContext, Visitor } from 'effect-oxlint';
  * Drawn from `conventions.md` — every Message is past-tense, verb-first.
  */
 const ALLOWED_PREFIXES = [
-	'Clicked',
-	'Updated',
-	'Submitted',
-	'Pressed',
+	'Aborted',
+	'Acknowledged',
+	'Added',
+	'Applied',
+	'Approved',
+	'Began',
 	'Blurred',
-	'Selected',
-	'Toggled',
-	'Succeeded',
-	'Failed',
-	'Completed',
-	'Got',
-	'Loaded',
-	'Hid',
-	'Ticked',
-	'Opened',
+	'Canceled',
+	'Cancelled',
+	'Changed',
+	'Checked',
+	'Chose',
+	'Cleared',
+	'Clicked',
 	'Closed',
+	'Collapsed',
+	'Committed',
+	'Completed',
+	'Confirmed',
+	'Connected',
+	'Copied',
+	'Created',
+	'Deleted',
+	'Disabled',
+	'Disconnected',
 	'Dismissed',
-	'Resized',
-	'Scrolled',
+	'Dragged',
+	'Dropped',
+	'Duplicated',
+	'Edited',
+	'Enabled',
+	'Ended',
+	'Entered',
+	'Expanded',
+	'Failed',
+	'Fetched',
 	'Focused',
-	'Hovered'
+	'Got',
+	'Hid',
+	'Hovered',
+	'Imported',
+	'Ingested',
+	'Initialized',
+	'Loaded',
+	'Mounted',
+	'Moved',
+	'Navigated',
+	'Opened',
+	'Paused',
+	'Persisted',
+	'Played',
+	'Pressed',
+	'Probed',
+	'Ran',
+	'Received',
+	'Refreshed',
+	'Regenerated',
+	'Rejected',
+	'Removed',
+	'Renamed',
+	'Reordered',
+	'Reported',
+	'Requested',
+	'Reset',
+	'Resized',
+	'Resumed',
+	'Returned',
+	'Saved',
+	'Scrolled',
+	'Selected',
+	'Sent',
+	'Set',
+	'Started',
+	'Stopped',
+	'Submitted',
+	'Subscribed',
+	'Succeeded',
+	'Switched',
+	'Tick',
+	'Ticked',
+	'Toggled',
+	'Typed',
+	'Unchecked',
+	'Unmounted',
+	'Unsubscribed',
+	'Updated',
+	'Uploaded',
+	'Viewed',
 ] as const;
 
 /**
@@ -47,8 +114,8 @@ const PastTenseMessageTag = Schema.String.check(
 		identifier: 'PastTenseMessageTag',
 		title: 'Past-Tense Message Tag',
 		description:
-			'Foldkit Message tag whose first word is a past-tense verb prefix.'
-	})
+			'Foldkit Message tag whose first word is a past-tense verb prefix.',
+	}),
 );
 
 const isPastTenseMessageTag = Schema.is(PastTenseMessageTag);
@@ -57,8 +124,10 @@ const isPastTenseMessageTag = Schema.is(PastTenseMessageTag);
 const startsWithPastTensePrefix = (tag: string): boolean =>
 	isPastTenseMessageTag(tag);
 
-const mTagFromCall = (call: ESTree.CallExpression): Option.Option<string> => {
-	if (call.callee.type !== 'Identifier' || call.callee.name !== 'm') {
+const mTagFromCall = (call: ESTree.CallExpression): Option.Option<string> =>
+{
+	if (call.callee.type !== 'Identifier' || call.callee.name !== 'm')
+	{
 		return Option.none();
 	}
 	const arg = call.arguments[0];
@@ -72,9 +141,10 @@ const rule: CreateRule = Rule.define({
 	meta: Rule.meta({
 		type: 'suggestion',
 		description:
-			'Enforce verb-first past-tense Foldkit Message names (e.g. ClickedSubmit, UpdatedEmail). (FK-1)'
+			'Enforce verb-first past-tense Foldkit Message names (e.g. ClickedSubmit, UpdatedEmail). (FK-1)',
 	}),
-	create: function* () {
+	create: function*()
+	{
 		const ctx = yield* RuleContext;
 		return Visitor.on('CallExpression', (node) =>
 			pipe(
@@ -86,13 +156,15 @@ const rule: CreateRule = Rule.define({
 						ctx.report(
 							Diagnostic.make({
 								node,
-								message: `Message tag \`${tag}\` does not start with an allowed verb-first past-tense prefix. Use one of: ${ALLOWED_PREFIXES.join(', ')}. (FK-1)`
-							})
-						)
-				})
-			)
-		);
-	}
+								message:
+									`Message tag \`${tag}\` does not start with an allowed verb-first past-tense prefix. Use one of: ${
+										ALLOWED_PREFIXES.join(', ')
+									}. (FK-1)`,
+							}),
+						),
+				}),
+			));
+	},
 });
 
 export default rule;

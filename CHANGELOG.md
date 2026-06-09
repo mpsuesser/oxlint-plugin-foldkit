@@ -1,6 +1,17 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 — Rule migration and navigation exceptions
+
+### Changed
+
+- Added `Applied` to the `require-past-tense-message-names` allow-list for events like applying a selection.
+- Allowed `ChangedRoute` and `ChangedUrl` in `no-changed-message-prefix`; those navigation events read better as changed facts than updated state.
+
+### Removed
+
+- Removed `require-capitalized-schema-literals`; capitalization of literal values is domain-specific and does not belong in the Foldkit plugin.
+- Removed `prefer-option-when-over-ternary`; Effect v4's closest built-in is `Option.liftPredicate`, so the old rule name and fix advice were misleading.
+- Moved Effect-generic rules to `@mpsuesser/oxlint-plugin-effect`: `prefer-array-fromoption-over-option-match-empty`, `no-length-comparison`, `no-effect-ignore-then-as`, `require-is-prefix-for-boolean-schema-field`, and `maybe-prefix-requires-option`.
 
 ## 0.2.3 — Effect 4.0.0-beta.78
 

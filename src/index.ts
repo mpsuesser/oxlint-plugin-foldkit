@@ -16,6 +16,7 @@ import noExplicitCommandTypeAnnotation from './rules/no-explicit-command-type-an
 import noHandRolledCommandStruct from './rules/no-hand-rolled-command-struct.ts';
 import noHandRolledFormControls from './rules/no-hand-rolled-form-controls.ts';
 import noHardcodedRouteStrings from './rules/no-hardcoded-route-strings.ts';
+import managedResourceForStatefulHandles from './rules/managed-resource-for-stateful-handles.ts';
 import noImpureCallsInPureLayer from './rules/no-impure-calls-in-pure-layer.ts';
 import noModuleLevelMutableState from './rules/no-module-level-mutable-state.ts';
 import noRawDomEventAttributes from './rules/no-raw-dom-event-attributes.ts';
@@ -69,6 +70,7 @@ const rules: Record<string, CreateRule> = {
 	'keyed-required-for-mapped-rows': keyedRequiredForMappedRows,
 	'no-array-index-view-keys': noArrayIndexViewKeys,
 	'no-raw-dom-event-attributes': noRawDomEventAttributes,
+	'managed-resource-for-stateful-handles': managedResourceForStatefulHandles,
 	'ui-toview-must-spread-attribute-bundles':
 		uiToviewMustSpreadAttributeBundles,
 

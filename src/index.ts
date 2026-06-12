@@ -9,6 +9,7 @@ import noArrayShorthandType from './rules/no-array-shorthand-type.ts';
 import noChangedMessagePrefix from './rules/no-changed-message-prefix.ts';
 import noEmptyObjectTaggedCall from './rules/no-empty-object-tagged-call.ts';
 import noExplicitCommandTypeAnnotation from './rules/no-explicit-command-type-annotation.ts';
+import noHandRolledCommandStruct from './rules/no-hand-rolled-command-struct.ts';
 import noHandRolledFormControls from './rules/no-hand-rolled-form-controls.ts';
 import noHardcodedRouteStrings from './rules/no-hardcoded-route-strings.ts';
 import noImpureCallsInPureLayer from './rules/no-impure-calls-in-pure-layer.ts';
@@ -35,6 +36,7 @@ const rules: Record<string, CreateRule> = {
 	// ── Command / construction shape (FK-2) ──────────────────
 	'command-failed-result-requires-catch': commandFailedResultRequiresCatch,
 	'command-define-pascal-const': commandDefinePascalConst,
+	'no-hand-rolled-command-struct': noHandRolledCommandStruct,
 	'no-empty-object-tagged-call': noEmptyObjectTaggedCall,
 	'no-spread-in-evo': noSpreadInEvo,
 	'no-explicit-command-type-annotation': noExplicitCommandTypeAnnotation,

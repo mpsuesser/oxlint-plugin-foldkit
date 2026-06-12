@@ -26,6 +26,7 @@ import noSpreadInEvo from './rules/no-spread-in-evo.ts';
 import preferDomHelpersForElementOps from './rules/prefer-dom-helpers-for-element-ops.ts';
 import preferEmptyOverEmptyElement from './rules/prefer-empty-over-empty-element.ts';
 import preferOptionMatchOverMapGetorelse from './rules/prefer-option-match-over-map-getorelse.ts';
+import preferStoryCommandMatchers from './rules/prefer-story-command-matchers.ts';
 import requireCompletedMirrorsCommand from './rules/require-completed-mirrors-command.ts';
 import requirePastTenseMessageNames from './rules/require-past-tense-message-names.ts';
 import requireRelForExternalLink from './rules/require-rel-for-external-link.ts';
@@ -79,6 +80,9 @@ const rules: Record<string, CreateRule> = {
 	'no-duplicate-onmount-per-element': noDuplicateOnmountPerElement,
 	'ui-toview-must-spread-attribute-bundles':
 		uiToviewMustSpreadAttributeBundles,
+
+	// ── Story / Scene tests ──────────────────────────────────
+	'prefer-story-command-matchers': preferStoryCommandMatchers,
 
 	// ── Type shape (FK-6) ────────────────────────────────────
 	'no-array-shorthand-type': noArrayShorthandType

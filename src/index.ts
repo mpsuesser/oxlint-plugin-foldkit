@@ -11,6 +11,7 @@ import noArrayIndexViewKeys from './rules/no-array-index-view-keys.ts';
 import noArrayShorthandType from './rules/no-array-shorthand-type.ts';
 import noChangedMessagePrefix from './rules/no-changed-message-prefix.ts';
 import noChildMessageConstructionInRoot from './rules/no-child-message-construction-in-root.ts';
+import noDuplicateOnmountPerElement from './rules/no-duplicate-onmount-per-element.ts';
 import noEmptyObjectTaggedCall from './rules/no-empty-object-tagged-call.ts';
 import noExplicitCommandTypeAnnotation from './rules/no-explicit-command-type-annotation.ts';
 import noHandRolledCommandStruct from './rules/no-hand-rolled-command-struct.ts';
@@ -73,6 +74,7 @@ const rules: Record<string, CreateRule> = {
 	'no-raw-dom-event-attributes': noRawDomEventAttributes,
 	'managed-resource-for-stateful-handles': managedResourceForStatefulHandles,
 	'mount-factory-must-use-element': mountFactoryMustUseElement,
+	'no-duplicate-onmount-per-element': noDuplicateOnmountPerElement,
 	'ui-toview-must-spread-attribute-bundles':
 		uiToviewMustSpreadAttributeBundles,
 

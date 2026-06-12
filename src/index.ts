@@ -25,15 +25,18 @@ import noImpureCallsInPureLayer from './rules/no-impure-calls-in-pure-layer.ts';
 import noModuleLevelMutableState from './rules/no-module-level-mutable-state.ts';
 import noRawDomEventAttributes from './rules/no-raw-dom-event-attributes.ts';
 import noSpreadInEvo from './rules/no-spread-in-evo.ts';
+import preferDomHelpersForElementOps from './rules/prefer-dom-helpers-for-element-ops.ts';
 import preferEmptyOverEmptyElement from './rules/prefer-empty-over-empty-element.ts';
 import preferEvoOverModelSpread from './rules/prefer-evo-over-model-spread.ts';
 import preferOptionMatchOverMapGetorelse from './rules/prefer-option-match-over-map-getorelse.ts';
+import preferStoryCommandMatchers from './rules/prefer-story-command-matchers.ts';
 import requireCompletedMirrorsCommand from './rules/require-completed-mirrors-command.ts';
 import requirePastTenseMessageNames from './rules/require-past-tense-message-names.ts';
 import requireRelForExternalLink from './rules/require-rel-for-external-link.ts';
 import requireSucceededFailedPair from './rules/require-succeeded-failed-pair.ts';
 import routeOneofShadowingOrder from './rules/route-oneof-shadowing-order.ts';
 import routeUnionParserRegistration from './rules/route-union-parser-registration.ts';
+import sceneTestsRunFromRoot from './rules/scene-tests-run-from-root.ts';
 import selectionSubmodelFactoryAtModuleScope from './rules/selection-submodel-factory-at-module-scope.ts';
 import subscriptionFileCanonicalShape from './rules/subscription-file-canonical-shape.ts';
 import uiToviewMustSpreadAttributeBundles from './rules/ui-toview-must-spread-attribute-bundles.ts';
@@ -81,6 +84,7 @@ const rules: Record<string, CreateRule> = {
 	'keyed-required-for-mapped-rows': keyedRequiredForMappedRows,
 	'no-array-index-view-keys': noArrayIndexViewKeys,
 	'no-raw-dom-event-attributes': noRawDomEventAttributes,
+	'prefer-dom-helpers-for-element-ops': preferDomHelpersForElementOps,
 	'managed-resource-for-stateful-handles': managedResourceForStatefulHandles,
 	'mount-factory-must-use-element': mountFactoryMustUseElement,
 	'no-duplicate-onmount-per-element': noDuplicateOnmountPerElement,
@@ -90,6 +94,10 @@ const rules: Record<string, CreateRule> = {
 	'selection-submodel-factory-at-module-scope':
 		selectionSubmodelFactoryAtModuleScope,
 	'lazy-view-stable-references': lazyViewStableReferences,
+
+	// ── Story / Scene tests ──────────────────────────────────
+	'prefer-story-command-matchers': preferStoryCommandMatchers,
+	'scene-tests-run-from-root': sceneTestsRunFromRoot,
 
 	// ── Type shape (FK-6) ────────────────────────────────────
 	'no-array-shorthand-type': noArrayShorthandType

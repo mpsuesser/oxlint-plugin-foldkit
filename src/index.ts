@@ -31,6 +31,7 @@ import requireRelForExternalLink from './rules/require-rel-for-external-link.ts'
 import requireSucceededFailedPair from './rules/require-succeeded-failed-pair.ts';
 import routeOneofShadowingOrder from './rules/route-oneof-shadowing-order.ts';
 import routeUnionParserRegistration from './rules/route-union-parser-registration.ts';
+import subscriptionFileCanonicalShape from './rules/subscription-file-canonical-shape.ts';
 import uiToviewMustSpreadAttributeBundles from './rules/ui-toview-must-spread-attribute-bundles.ts';
 
 const rules: Record<string, CreateRule> = {
@@ -77,6 +78,7 @@ const rules: Record<string, CreateRule> = {
 	'no-duplicate-onmount-per-element': noDuplicateOnmountPerElement,
 	'ui-toview-must-spread-attribute-bundles':
 		uiToviewMustSpreadAttributeBundles,
+	'subscription-file-canonical-shape': subscriptionFileCanonicalShape,
 
 	// ── Type shape (FK-6) ────────────────────────────────────
 	'no-array-shorthand-type': noArrayShorthandType

@@ -24,6 +24,7 @@ import noModuleLevelMutableState from './rules/no-module-level-mutable-state.ts'
 import noRawDomEventAttributes from './rules/no-raw-dom-event-attributes.ts';
 import noSpreadInEvo from './rules/no-spread-in-evo.ts';
 import preferEmptyOverEmptyElement from './rules/prefer-empty-over-empty-element.ts';
+import preferEvoOverModelSpread from './rules/prefer-evo-over-model-spread.ts';
 import preferOptionMatchOverMapGetorelse from './rules/prefer-option-match-over-map-getorelse.ts';
 import requireCompletedMirrorsCommand from './rules/require-completed-mirrors-command.ts';
 import requirePastTenseMessageNames from './rules/require-past-tense-message-names.ts';
@@ -54,6 +55,7 @@ const rules: Record<string, CreateRule> = {
 	'no-hand-rolled-command-struct': noHandRolledCommandStruct,
 	'no-empty-object-tagged-call': noEmptyObjectTaggedCall,
 	'no-spread-in-evo': noSpreadInEvo,
+	'prefer-evo-over-model-spread': preferEvoOverModelSpread,
 	'no-explicit-command-type-annotation': noExplicitCommandTypeAnnotation,
 
 	// ── Effect / Option idioms (FK-3) ────────────────────────

@@ -11,6 +11,7 @@ import noArrayIndexViewKeys from './rules/no-array-index-view-keys.ts';
 import noArrayShorthandType from './rules/no-array-shorthand-type.ts';
 import noChangedMessagePrefix from './rules/no-changed-message-prefix.ts';
 import noChildMessageConstructionInRoot from './rules/no-child-message-construction-in-root.ts';
+import noDisablingDevGuardrails from './rules/no-disabling-dev-guardrails.ts';
 import noDuplicateOnmountPerElement from './rules/no-duplicate-onmount-per-element.ts';
 import noEmptyObjectTaggedCall from './rules/no-empty-object-tagged-call.ts';
 import noExplicitCommandTypeAnnotation from './rules/no-explicit-command-type-annotation.ts';
@@ -24,6 +25,7 @@ import noModuleLevelMutableState from './rules/no-module-level-mutable-state.ts'
 import noRawDomEventAttributes from './rules/no-raw-dom-event-attributes.ts';
 import noSpreadInEvo from './rules/no-spread-in-evo.ts';
 import preferEmptyOverEmptyElement from './rules/prefer-empty-over-empty-element.ts';
+import preferEvoOverModelSpread from './rules/prefer-evo-over-model-spread.ts';
 import preferOptionMatchOverMapGetorelse from './rules/prefer-option-match-over-map-getorelse.ts';
 import requireCompletedMirrorsCommand from './rules/require-completed-mirrors-command.ts';
 import requirePastTenseMessageNames from './rules/require-past-tense-message-names.ts';
@@ -32,6 +34,7 @@ import requireSucceededFailedPair from './rules/require-succeeded-failed-pair.ts
 import routeOneofShadowingOrder from './rules/route-oneof-shadowing-order.ts';
 import routeUnionParserRegistration from './rules/route-union-parser-registration.ts';
 import uiToviewMustSpreadAttributeBundles from './rules/ui-toview-must-spread-attribute-bundles.ts';
+import wrapChildOutputInGotMessage from './rules/wrap-child-output-in-got-message.ts';
 
 const rules: Record<string, CreateRule> = {
 	// ── Message naming (FK-1) ────────────────────────────────
@@ -40,11 +43,13 @@ const rules: Record<string, CreateRule> = {
 	'require-succeeded-failed-pair': requireSucceededFailedPair,
 	'require-completed-mirrors-command': requireCompletedMirrorsCommand,
 	'got-wrapper-carries-only-routing': gotWrapperCarriesOnlyRouting,
+	'wrap-child-output-in-got-message': wrapChildOutputInGotMessage,
 	'no-child-message-construction-in-root': noChildMessageConstructionInRoot,
 
 	// ── Purity / side-effect boundaries ──────────────────────
 	'no-impure-calls-in-pure-layer': noImpureCallsInPureLayer,
 	'no-module-level-mutable-state': noModuleLevelMutableState,
+	'no-disabling-dev-guardrails': noDisablingDevGuardrails,
 
 	// ── Command / construction shape (FK-2) ──────────────────
 	'command-failed-result-requires-catch': commandFailedResultRequiresCatch,
@@ -54,6 +59,7 @@ const rules: Record<string, CreateRule> = {
 	'no-hand-rolled-command-struct': noHandRolledCommandStruct,
 	'no-empty-object-tagged-call': noEmptyObjectTaggedCall,
 	'no-spread-in-evo': noSpreadInEvo,
+	'prefer-evo-over-model-spread': preferEvoOverModelSpread,
 	'no-explicit-command-type-annotation': noExplicitCommandTypeAnnotation,
 
 	// ── Effect / Option idioms (FK-3) ────────────────────────

@@ -10,6 +10,7 @@ import labelRequiresFor from './rules/label-requires-for.ts';
 import noArrayIndexViewKeys from './rules/no-array-index-view-keys.ts';
 import noArrayShorthandType from './rules/no-array-shorthand-type.ts';
 import noChangedMessagePrefix from './rules/no-changed-message-prefix.ts';
+import noChildMessageConstructionInRoot from './rules/no-child-message-construction-in-root.ts';
 import noEmptyObjectTaggedCall from './rules/no-empty-object-tagged-call.ts';
 import noExplicitCommandTypeAnnotation from './rules/no-explicit-command-type-annotation.ts';
 import noHandRolledCommandStruct from './rules/no-hand-rolled-command-struct.ts';
@@ -34,6 +35,7 @@ const rules: Record<string, CreateRule> = {
 	'require-succeeded-failed-pair': requireSucceededFailedPair,
 	'require-completed-mirrors-command': requireCompletedMirrorsCommand,
 	'got-wrapper-carries-only-routing': gotWrapperCarriesOnlyRouting,
+	'no-child-message-construction-in-root': noChildMessageConstructionInRoot,
 
 	// ── Purity / side-effect boundaries ──────────────────────
 	'no-impure-calls-in-pure-layer': noImpureCallsInPureLayer,

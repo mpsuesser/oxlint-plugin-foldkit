@@ -7,6 +7,7 @@ import foldkitPrimitivesDeclaredInRoleFiles from './rules/foldkit-primitives-dec
 import gotWrapperCarriesOnlyRouting from './rules/got-wrapper-carries-only-routing.ts';
 import keyedRequiredForMappedRows from './rules/keyed-required-for-mapped-rows.ts';
 import labelRequiresFor from './rules/label-requires-for.ts';
+import lazyViewStableReferences from './rules/lazy-view-stable-references.ts';
 import noArrayIndexViewKeys from './rules/no-array-index-view-keys.ts';
 import noArrayShorthandType from './rules/no-array-shorthand-type.ts';
 import noChangedMessagePrefix from './rules/no-changed-message-prefix.ts';
@@ -82,6 +83,7 @@ const rules: Record<string, CreateRule> = {
 	'subscription-file-canonical-shape': subscriptionFileCanonicalShape,
 	'selection-submodel-factory-at-module-scope':
 		selectionSubmodelFactoryAtModuleScope,
+	'lazy-view-stable-references': lazyViewStableReferences,
 
 	// ── Type shape (FK-6) ────────────────────────────────────
 	'no-array-shorthand-type': noArrayShorthandType

@@ -18,6 +18,7 @@ import noHandRolledFormControls from './rules/no-hand-rolled-form-controls.ts';
 import noHardcodedRouteStrings from './rules/no-hardcoded-route-strings.ts';
 import noImpureCallsInPureLayer from './rules/no-impure-calls-in-pure-layer.ts';
 import noModuleLevelMutableState from './rules/no-module-level-mutable-state.ts';
+import noRawDomEventAttributes from './rules/no-raw-dom-event-attributes.ts';
 import noSpreadInEvo from './rules/no-spread-in-evo.ts';
 import preferEmptyOverEmptyElement from './rules/prefer-empty-over-empty-element.ts';
 import preferOptionMatchOverMapGetorelse from './rules/prefer-option-match-over-map-getorelse.ts';
@@ -67,6 +68,7 @@ const rules: Record<string, CreateRule> = {
 	'no-hand-rolled-form-controls': noHandRolledFormControls,
 	'keyed-required-for-mapped-rows': keyedRequiredForMappedRows,
 	'no-array-index-view-keys': noArrayIndexViewKeys,
+	'no-raw-dom-event-attributes': noRawDomEventAttributes,
 	'ui-toview-must-spread-attribute-bundles':
 		uiToviewMustSpreadAttributeBundles,
 

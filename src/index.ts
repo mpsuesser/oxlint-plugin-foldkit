@@ -5,6 +5,7 @@ import commandDefinePascalConst from './rules/command-define-pascal-const.ts';
 import commandFailedResultRequiresCatch from './rules/command-failed-result-requires-catch.ts';
 import keyedRequiredForMappedRows from './rules/keyed-required-for-mapped-rows.ts';
 import labelRequiresFor from './rules/label-requires-for.ts';
+import noArrayIndexViewKeys from './rules/no-array-index-view-keys.ts';
 import noArrayShorthandType from './rules/no-array-shorthand-type.ts';
 import noChangedMessagePrefix from './rules/no-changed-message-prefix.ts';
 import noEmptyObjectTaggedCall from './rules/no-empty-object-tagged-call.ts';
@@ -53,6 +54,7 @@ const rules: Record<string, CreateRule> = {
 	'label-requires-for': labelRequiresFor,
 	'no-hand-rolled-form-controls': noHandRolledFormControls,
 	'keyed-required-for-mapped-rows': keyedRequiredForMappedRows,
+	'no-array-index-view-keys': noArrayIndexViewKeys,
 
 	// ── Type shape (FK-6) ────────────────────────────────────
 	'no-array-shorthand-type': noArrayShorthandType

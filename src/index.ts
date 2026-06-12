@@ -4,6 +4,7 @@ import { Plugin } from 'effect-oxlint';
 import commandDefinePascalConst from './rules/command-define-pascal-const.ts';
 import commandFailedResultRequiresCatch from './rules/command-failed-result-requires-catch.ts';
 import foldkitPrimitivesDeclaredInRoleFiles from './rules/foldkit-primitives-declared-in-role-files.ts';
+import gotWrapperCarriesOnlyRouting from './rules/got-wrapper-carries-only-routing.ts';
 import keyedRequiredForMappedRows from './rules/keyed-required-for-mapped-rows.ts';
 import labelRequiresFor from './rules/label-requires-for.ts';
 import noArrayIndexViewKeys from './rules/no-array-index-view-keys.ts';
@@ -32,6 +33,7 @@ const rules: Record<string, CreateRule> = {
 	'no-changed-message-prefix': noChangedMessagePrefix,
 	'require-succeeded-failed-pair': requireSucceededFailedPair,
 	'require-completed-mirrors-command': requireCompletedMirrorsCommand,
+	'got-wrapper-carries-only-routing': gotWrapperCarriesOnlyRouting,
 
 	// ── Purity / side-effect boundaries ──────────────────────
 	'no-impure-calls-in-pure-layer': noImpureCallsInPureLayer,

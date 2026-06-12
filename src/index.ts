@@ -10,6 +10,7 @@ import noEmptyObjectTaggedCall from './rules/no-empty-object-tagged-call.ts';
 import noExplicitCommandTypeAnnotation from './rules/no-explicit-command-type-annotation.ts';
 import noHandRolledFormControls from './rules/no-hand-rolled-form-controls.ts';
 import noHardcodedRouteStrings from './rules/no-hardcoded-route-strings.ts';
+import noImpureCallsInPureLayer from './rules/no-impure-calls-in-pure-layer.ts';
 import noSpreadInEvo from './rules/no-spread-in-evo.ts';
 import preferEmptyOverEmptyElement from './rules/prefer-empty-over-empty-element.ts';
 import preferOptionMatchOverMapGetorelse from './rules/prefer-option-match-over-map-getorelse.ts';
@@ -24,6 +25,9 @@ const rules: Record<string, CreateRule> = {
 	'no-changed-message-prefix': noChangedMessagePrefix,
 	'require-succeeded-failed-pair': requireSucceededFailedPair,
 	'require-completed-mirrors-command': requireCompletedMirrorsCommand,
+
+	// ── Purity / side-effect boundaries ──────────────────────
+	'no-impure-calls-in-pure-layer': noImpureCallsInPureLayer,
 
 	// ── Command / construction shape (FK-2) ──────────────────
 	'command-define-pascal-const': commandDefinePascalConst,
@@ -45,7 +49,7 @@ const rules: Record<string, CreateRule> = {
 	'keyed-required-for-mapped-rows': keyedRequiredForMappedRows,
 
 	// ── Type shape (FK-6) ────────────────────────────────────
-	'no-array-shorthand-type': noArrayShorthandType,
+	'no-array-shorthand-type': noArrayShorthandType
 };
 
 /**
@@ -56,7 +60,7 @@ const rules: Record<string, CreateRule> = {
 const plugin: Plugin.DefinedPlugin<Record<string, CreateRule>> = Plugin.define({
 	name: '@mpsuesser/foldkit',
 	specifier: '@mpsuesser/oxlint-plugin-foldkit',
-	rules,
+	rules
 });
 
 export default plugin;

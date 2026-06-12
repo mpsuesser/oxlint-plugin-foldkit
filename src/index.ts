@@ -2,6 +2,7 @@ import type { CreateRule } from '@oxlint/plugins';
 import { Plugin } from 'effect-oxlint';
 
 import commandDefinePascalConst from './rules/command-define-pascal-const.ts';
+import commandFailedResultRequiresCatch from './rules/command-failed-result-requires-catch.ts';
 import keyedRequiredForMappedRows from './rules/keyed-required-for-mapped-rows.ts';
 import labelRequiresFor from './rules/label-requires-for.ts';
 import noArrayShorthandType from './rules/no-array-shorthand-type.ts';
@@ -32,6 +33,7 @@ const rules: Record<string, CreateRule> = {
 	'no-module-level-mutable-state': noModuleLevelMutableState,
 
 	// ── Command / construction shape (FK-2) ──────────────────
+	'command-failed-result-requires-catch': commandFailedResultRequiresCatch,
 	'command-define-pascal-const': commandDefinePascalConst,
 	'no-empty-object-tagged-call': noEmptyObjectTaggedCall,
 	'no-spread-in-evo': noSpreadInEvo,

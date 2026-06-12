@@ -3,6 +3,7 @@ import { Plugin } from 'effect-oxlint';
 
 import commandDefinePascalConst from './rules/command-define-pascal-const.ts';
 import commandFailedResultRequiresCatch from './rules/command-failed-result-requires-catch.ts';
+import foldkitPrimitivesDeclaredInRoleFiles from './rules/foldkit-primitives-declared-in-role-files.ts';
 import keyedRequiredForMappedRows from './rules/keyed-required-for-mapped-rows.ts';
 import labelRequiresFor from './rules/label-requires-for.ts';
 import noArrayIndexViewKeys from './rules/no-array-index-view-keys.ts';
@@ -39,6 +40,8 @@ const rules: Record<string, CreateRule> = {
 	// ── Command / construction shape (FK-2) ──────────────────
 	'command-failed-result-requires-catch': commandFailedResultRequiresCatch,
 	'command-define-pascal-const': commandDefinePascalConst,
+	'foldkit-primitives-declared-in-role-files':
+		foldkitPrimitivesDeclaredInRoleFiles,
 	'no-hand-rolled-command-struct': noHandRolledCommandStruct,
 	'no-empty-object-tagged-call': noEmptyObjectTaggedCall,
 	'no-spread-in-evo': noSpreadInEvo,

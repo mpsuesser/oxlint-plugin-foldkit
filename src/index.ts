@@ -21,6 +21,7 @@ import preferOptionMatchOverMapGetorelse from './rules/prefer-option-match-over-
 import requireCompletedMirrorsCommand from './rules/require-completed-mirrors-command.ts';
 import requirePastTenseMessageNames from './rules/require-past-tense-message-names.ts';
 import requireRelForExternalLink from './rules/require-rel-for-external-link.ts';
+import routeUnionParserRegistration from './rules/route-union-parser-registration.ts';
 import requireSucceededFailedPair from './rules/require-succeeded-failed-pair.ts';
 
 const rules: Record<string, CreateRule> = {
@@ -47,6 +48,7 @@ const rules: Record<string, CreateRule> = {
 
 	// ── Routing (FK-4) ───────────────────────────────────────
 	'no-hardcoded-route-strings': noHardcodedRouteStrings,
+	'route-union-parser-registration': routeUnionParserRegistration,
 
 	// ── View / accessibility (FK-5) ──────────────────────────
 	'require-rel-for-external-link': requireRelForExternalLink,

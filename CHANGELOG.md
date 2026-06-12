@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.4.0 — Foldkit enforcement expansion
+
+### Added
+
+- Added 24 Foldkit-specific rules covering purity boundaries, command failure handling, route registration/order, submodel wrappers, keyed view identity, resource lifecycles, Mount usage, custom `Ui.*.toView` wiring, subscription file shape, lazy view stability, and Story/Scene test conventions.
+- Expanded the generated `configs.recommended` preset to enable all 40 Foldkit rules at `error` severity.
+
+### Changed
+
+- Reworked the README into a complete user-facing rule reference with setup guidance, rule scopes, impact notes, and before/after examples for every rule.
+
 ## 0.3.0 — Rule migration and navigation exceptions
 
 ### Changed

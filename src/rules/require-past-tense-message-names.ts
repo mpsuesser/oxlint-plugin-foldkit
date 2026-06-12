@@ -102,7 +102,7 @@ const ALLOWED_PREFIXES = [
 	'Unsubscribed',
 	'Updated',
 	'Uploaded',
-	'Viewed',
+	'Viewed'
 ] as const;
 
 /**
@@ -114,8 +114,8 @@ const PastTenseMessageTag = Schema.String.check(
 		identifier: 'PastTenseMessageTag',
 		title: 'Past-Tense Message Tag',
 		description:
-			'Foldkit Message tag whose first word is a past-tense verb prefix.',
-	}),
+			'Foldkit Message tag whose first word is a past-tense verb prefix.'
+	})
 );
 
 const isPastTenseMessageTag = Schema.is(PastTenseMessageTag);
@@ -124,10 +124,8 @@ const isPastTenseMessageTag = Schema.is(PastTenseMessageTag);
 const startsWithPastTensePrefix = (tag: string): boolean =>
 	isPastTenseMessageTag(tag);
 
-const mTagFromCall = (call: ESTree.CallExpression): Option.Option<string> =>
-{
-	if (call.callee.type !== 'Identifier' || call.callee.name !== 'm')
-	{
+const mTagFromCall = (call: ESTree.CallExpression): Option.Option<string> => {
+	if (call.callee.type !== 'Identifier' || call.callee.name !== 'm') {
 		return Option.none();
 	}
 	const arg = call.arguments[0];
@@ -141,10 +139,9 @@ const rule: CreateRule = Rule.define({
 	meta: Rule.meta({
 		type: 'suggestion',
 		description:
-			'Enforce verb-first past-tense Foldkit Message names (e.g. ClickedSubmit, UpdatedEmail). (FK-1)',
+			'Enforce verb-first past-tense Foldkit Message names (e.g. ClickedSubmit, UpdatedEmail). (FK-1)'
 	}),
-	create: function*()
-	{
+	create: function* () {
 		const ctx = yield* RuleContext;
 		return Visitor.on('CallExpression', (node) =>
 			pipe(
@@ -156,15 +153,15 @@ const rule: CreateRule = Rule.define({
 						ctx.report(
 							Diagnostic.make({
 								node,
-								message:
-									`Message tag \`${tag}\` does not start with an allowed verb-first past-tense prefix. Use one of: ${
-										ALLOWED_PREFIXES.join(', ')
-									}. (FK-1)`,
-							}),
-						),
-				}),
-			));
-	},
+								message: `Message tag \`${tag}\` does not start with an allowed verb-first past-tense prefix. Use one of: ${ALLOWED_PREFIXES.join(
+									', '
+								)}. (FK-1)`
+							})
+						)
+				})
+			)
+		);
+	}
 });
 
 export default rule;

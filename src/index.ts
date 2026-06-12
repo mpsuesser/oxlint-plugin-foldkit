@@ -33,6 +33,7 @@ import requireRelForExternalLink from './rules/require-rel-for-external-link.ts'
 import requireSucceededFailedPair from './rules/require-succeeded-failed-pair.ts';
 import routeOneofShadowingOrder from './rules/route-oneof-shadowing-order.ts';
 import routeUnionParserRegistration from './rules/route-union-parser-registration.ts';
+import sceneTestsRunFromRoot from './rules/scene-tests-run-from-root.ts';
 import uiToviewMustSpreadAttributeBundles from './rules/ui-toview-must-spread-attribute-bundles.ts';
 
 const rules: Record<string, CreateRule> = {
@@ -83,6 +84,7 @@ const rules: Record<string, CreateRule> = {
 
 	// ── Story / Scene tests ──────────────────────────────────
 	'prefer-story-command-matchers': preferStoryCommandMatchers,
+	'scene-tests-run-from-root': sceneTestsRunFromRoot,
 
 	// ── Type shape (FK-6) ────────────────────────────────────
 	'no-array-shorthand-type': noArrayShorthandType

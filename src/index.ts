@@ -34,6 +34,7 @@ import requireSucceededFailedPair from './rules/require-succeeded-failed-pair.ts
 import routeOneofShadowingOrder from './rules/route-oneof-shadowing-order.ts';
 import routeUnionParserRegistration from './rules/route-union-parser-registration.ts';
 import uiToviewMustSpreadAttributeBundles from './rules/ui-toview-must-spread-attribute-bundles.ts';
+import wrapChildOutputInGotMessage from './rules/wrap-child-output-in-got-message.ts';
 
 const rules: Record<string, CreateRule> = {
 	// ── Message naming (FK-1) ────────────────────────────────
@@ -42,6 +43,7 @@ const rules: Record<string, CreateRule> = {
 	'require-succeeded-failed-pair': requireSucceededFailedPair,
 	'require-completed-mirrors-command': requireCompletedMirrorsCommand,
 	'got-wrapper-carries-only-routing': gotWrapperCarriesOnlyRouting,
+	'wrap-child-output-in-got-message': wrapChildOutputInGotMessage,
 	'no-child-message-construction-in-root': noChildMessageConstructionInRoot,
 
 	// ── Purity / side-effect boundaries ──────────────────────

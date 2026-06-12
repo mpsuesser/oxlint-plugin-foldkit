@@ -7,6 +7,7 @@ import foldkitPrimitivesDeclaredInRoleFiles from './rules/foldkit-primitives-dec
 import gotWrapperCarriesOnlyRouting from './rules/got-wrapper-carries-only-routing.ts';
 import keyedRequiredForMappedRows from './rules/keyed-required-for-mapped-rows.ts';
 import labelRequiresFor from './rules/label-requires-for.ts';
+import lazyViewStableReferences from './rules/lazy-view-stable-references.ts';
 import noArrayIndexViewKeys from './rules/no-array-index-view-keys.ts';
 import noArrayShorthandType from './rules/no-array-shorthand-type.ts';
 import noChangedMessagePrefix from './rules/no-changed-message-prefix.ts';
@@ -33,6 +34,8 @@ import requireRelForExternalLink from './rules/require-rel-for-external-link.ts'
 import requireSucceededFailedPair from './rules/require-succeeded-failed-pair.ts';
 import routeOneofShadowingOrder from './rules/route-oneof-shadowing-order.ts';
 import routeUnionParserRegistration from './rules/route-union-parser-registration.ts';
+import selectionSubmodelFactoryAtModuleScope from './rules/selection-submodel-factory-at-module-scope.ts';
+import subscriptionFileCanonicalShape from './rules/subscription-file-canonical-shape.ts';
 import uiToviewMustSpreadAttributeBundles from './rules/ui-toview-must-spread-attribute-bundles.ts';
 import wrapChildOutputInGotMessage from './rules/wrap-child-output-in-got-message.ts';
 
@@ -83,6 +86,10 @@ const rules: Record<string, CreateRule> = {
 	'no-duplicate-onmount-per-element': noDuplicateOnmountPerElement,
 	'ui-toview-must-spread-attribute-bundles':
 		uiToviewMustSpreadAttributeBundles,
+	'subscription-file-canonical-shape': subscriptionFileCanonicalShape,
+	'selection-submodel-factory-at-module-scope':
+		selectionSubmodelFactoryAtModuleScope,
+	'lazy-view-stable-references': lazyViewStableReferences,
 
 	// ── Type shape (FK-6) ────────────────────────────────────
 	'no-array-shorthand-type': noArrayShorthandType

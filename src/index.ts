@@ -11,6 +11,7 @@ import noExplicitCommandTypeAnnotation from './rules/no-explicit-command-type-an
 import noHandRolledFormControls from './rules/no-hand-rolled-form-controls.ts';
 import noHardcodedRouteStrings from './rules/no-hardcoded-route-strings.ts';
 import noImpureCallsInPureLayer from './rules/no-impure-calls-in-pure-layer.ts';
+import noModuleLevelMutableState from './rules/no-module-level-mutable-state.ts';
 import noSpreadInEvo from './rules/no-spread-in-evo.ts';
 import preferEmptyOverEmptyElement from './rules/prefer-empty-over-empty-element.ts';
 import preferOptionMatchOverMapGetorelse from './rules/prefer-option-match-over-map-getorelse.ts';
@@ -28,6 +29,7 @@ const rules: Record<string, CreateRule> = {
 
 	// ── Purity / side-effect boundaries ──────────────────────
 	'no-impure-calls-in-pure-layer': noImpureCallsInPureLayer,
+	'no-module-level-mutable-state': noModuleLevelMutableState,
 
 	// ── Command / construction shape (FK-2) ──────────────────
 	'command-define-pascal-const': commandDefinePascalConst,

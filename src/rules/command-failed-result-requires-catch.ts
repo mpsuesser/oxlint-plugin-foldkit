@@ -180,11 +180,13 @@ const containsCatch = (root: unknown): boolean => {
 	if (isEffectCatchCall(root)) return true;
 	if (!P.isObject(root)) return false;
 	return pipe(
-		Object.values(root),
-		Arr.some((child) =>
-			Array.isArray(child)
-				? pipe(child, Arr.some(containsCatch))
-				: containsCatch(child)
+		Object.entries(root),
+		Arr.some(([key, child]) =>
+			key === 'parent'
+				? false
+				: Array.isArray(child)
+					? pipe(child, Arr.some(containsCatch))
+					: containsCatch(child)
 		)
 	);
 };

@@ -60,6 +60,16 @@ describe('command-failed-result-requires-catch', () => {
 		expect(result[0]?.diagnostic.message).toContain('Effect.catch');
 	});
 
+	it('ignores parent links when searching the applied Effect subtree', () => {
+		const defineCall = failedDefine();
+		const effect = effectGen();
+		const applied = applyDefine(defineCall, effect);
+		Object.defineProperty(effect, 'parent', { value: applied });
+		const result = Testing.runRule(rule, 'CallExpression', applied);
+		expect(result).toHaveLength(1);
+		expect(result[0]?.diagnostic.message).toContain('FailedFetchUser');
+	});
+
 	it.each([
 		'catch',
 		'catchAll',

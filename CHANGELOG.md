@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1 — Command failure rule stability
+
+### Fixed
+
+- Fixed `command-failed-result-requires-catch` crashing with `RangeError: Maximum call stack size exceeded` on real ASTs that include parent links.
+
 ## 0.4.0 — Foldkit enforcement expansion
 
 ### Added

@@ -17,6 +17,7 @@ import { Diagnostic, Rule, RuleContext, Visitor } from 'effect-oxlint';
 const ALLOWED_PREFIXES = [
 	'Aborted',
 	'Acknowledged',
+	'Acquired',
 	'Added',
 	'Applied',
 	'Approved',
@@ -73,6 +74,7 @@ const ALLOWED_PREFIXES = [
 	'Refreshed',
 	'Regenerated',
 	'Rejected',
+	'Released',
 	'Removed',
 	'Renamed',
 	'Reordered',

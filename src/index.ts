@@ -4,10 +4,13 @@ import { Plugin } from 'effect-oxlint';
 import commandDefinePascalConst from './rules/command-define-pascal-const.ts';
 import commandFailedResultRequiresCatch from './rules/command-failed-result-requires-catch.ts';
 import foldkitPrimitivesDeclaredInRoleFiles from './rules/foldkit-primitives-declared-in-role-files.ts';
+import gotPrefixRequiresSubmodelPayload from './rules/got-prefix-requires-submodel-payload.ts';
+import gotSubmodelMessageName from './rules/got-submodel-message-name.ts';
 import gotWrapperCarriesOnlyRouting from './rules/got-wrapper-carries-only-routing.ts';
 import keyedRequiredForMappedRows from './rules/keyed-required-for-mapped-rows.ts';
 import labelRequiresFor from './rules/label-requires-for.ts';
 import lazyViewStableReferences from './rules/lazy-view-stable-references.ts';
+import messageBindingMatchesTag from './rules/message-binding-matches-tag.ts';
 import noArrayIndexViewKeys from './rules/no-array-index-view-keys.ts';
 import noArrayShorthandType from './rules/no-array-shorthand-type.ts';
 import noChangedMessagePrefix from './rules/no-changed-message-prefix.ts';
@@ -23,8 +26,10 @@ import managedResourceForStatefulHandles from './rules/managed-resource-for-stat
 import mountFactoryMustUseElement from './rules/mount-factory-must-use-element.ts';
 import noImpureCallsInPureLayer from './rules/no-impure-calls-in-pure-layer.ts';
 import noModuleLevelMutableState from './rules/no-module-level-mutable-state.ts';
+import noNoopMessage from './rules/no-noop-message.ts';
 import noRawDomEventAttributes from './rules/no-raw-dom-event-attributes.ts';
 import noSpreadInEvo from './rules/no-spread-in-evo.ts';
+import preferCallableMessageConstructor from './rules/prefer-callable-message-constructor.ts';
 import preferDomHelpersForElementOps from './rules/prefer-dom-helpers-for-element-ops.ts';
 import preferEmptyOverEmptyElement from './rules/prefer-empty-over-empty-element.ts';
 import preferEvoOverModelSpread from './rules/prefer-evo-over-model-spread.ts';
@@ -45,9 +50,13 @@ import wrapChildOutputInGotMessage from './rules/wrap-child-output-in-got-messag
 const rules: Record<string, CreateRule> = {
 	// ── Message naming (FK-1) ────────────────────────────────
 	'require-past-tense-message-names': requirePastTenseMessageNames,
+	'no-noop-message': noNoopMessage,
+	'message-binding-matches-tag': messageBindingMatchesTag,
 	'no-changed-message-prefix': noChangedMessagePrefix,
 	'require-succeeded-failed-pair': requireSucceededFailedPair,
 	'require-completed-mirrors-command': requireCompletedMirrorsCommand,
+	'got-submodel-message-name': gotSubmodelMessageName,
+	'got-prefix-requires-submodel-payload': gotPrefixRequiresSubmodelPayload,
 	'got-wrapper-carries-only-routing': gotWrapperCarriesOnlyRouting,
 	'wrap-child-output-in-got-message': wrapChildOutputInGotMessage,
 	'no-child-message-construction-in-root': noChildMessageConstructionInRoot,
@@ -64,6 +73,7 @@ const rules: Record<string, CreateRule> = {
 		foldkitPrimitivesDeclaredInRoleFiles,
 	'no-hand-rolled-command-struct': noHandRolledCommandStruct,
 	'no-empty-object-tagged-call': noEmptyObjectTaggedCall,
+	'prefer-callable-message-constructor': preferCallableMessageConstructor,
 	'no-spread-in-evo': noSpreadInEvo,
 	'prefer-evo-over-model-spread': preferEvoOverModelSpread,
 	'no-explicit-command-type-annotation': noExplicitCommandTypeAnnotation,

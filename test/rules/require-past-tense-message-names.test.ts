@@ -71,6 +71,10 @@ describe('require-past-tense-message-names', () => {
 		}
 	);
 
+	it('leaves `m("NoOp")` to the dedicated no-noop-message rule', () => {
+		expect(flag('NoOp')).toHaveLength(0);
+	});
+
 	// ── disallowed prefixes ──────────────────────────────────
 	it.each([
 		['ChangeEmail', 'present tense `Change*`'],

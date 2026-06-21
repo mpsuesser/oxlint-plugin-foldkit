@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added Foldkit parity rules for `NoOp` Messages, Message binding/tag drift, submodel wrapper naming, `Got*` payload requirements, and callable Message constructor usage.
+
 ## 0.4.1 — Command failure rule stability
 
 ### Fixed

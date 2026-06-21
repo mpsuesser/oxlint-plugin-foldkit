@@ -10,7 +10,7 @@ The plugin focuses on the parts of Foldkit code that TypeScript cannot fully pro
 
 > This is an unofficial, personal ruleset published under `@mpsuesser/*` so the canonical `oxlint-plugin-foldkit` / `foldkit/*` namespace remains available for the Foldkit project itself.
 
-The package currently ships **40 rules**. They are implemented with the [`effect-oxlint`](https://github.com/mpsuesser/effect-oxlint) SDK and run as standard oxlint JavaScript plugin rules.
+The package currently ships **45 rules**. They are implemented with the [`effect-oxlint`](https://github.com/mpsuesser/effect-oxlint) SDK and run as standard oxlint JavaScript plugin rules.
 
 ## Installation
 
@@ -31,7 +31,7 @@ export default defineConfig({
 });
 ```
 
-`configs.recommended` registers the package through oxlint's `jsPlugins` field and enables all 40 rules at `error` severity. Several rules are path-aware, so they only report in files where the convention applies.
+`configs.recommended` registers the package through oxlint's `jsPlugins` field and enables all 45 rules at `error` severity. Several rules are path-aware, so they only report in files where the convention applies.
 
 To override an individual rule, add a `rules` entry after the `extends` block:
 
@@ -78,9 +78,13 @@ Some rules intentionally activate only in certain file roles:
 | Rule                                                                                        | What it catches                                                               |
 | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
 | [`require-past-tense-message-names`](#require-past-tense-message-names)                     | Message tags that are not verb-first past tense                               |
+| [`no-noop-message`](#no-noop-message)                                                       | catch-all `NoOp` Messages                                                     |
+| [`message-binding-matches-tag`](#message-binding-matches-tag)                               | Message const binding names that drift from their `m(...)` tags               |
 | [`no-changed-message-prefix`](#no-changed-message-prefix)                                   | `Changed*` instead of `Updated*`, except `ChangedRoute` / `ChangedUrl`        |
 | [`require-succeeded-failed-pair`](#require-succeeded-failed-pair)                           | `Succeeded*` without a matching `Failed*`                                     |
 | [`require-completed-mirrors-command`](#require-completed-mirrors-command)                   | `Completed*` Message that does not mirror a local `Command.define(...)`       |
+| [`got-submodel-message-name`](#got-submodel-message-name)                                   | Submodel wrappers not named `Got*Message`                                     |
+| [`got-prefix-requires-submodel-payload`](#got-prefix-requires-submodel-payload)             | `Got*` Messages without `message: Child.Message`                              |
 | [`got-wrapper-carries-only-routing`](#got-wrapper-carries-only-routing)                     | `Got*` wrapper Messages with the wrong name or payload shape                  |
 | [`wrap-child-output-in-got-message`](#wrap-child-output-in-got-message)                     | child output mappers that bypass `Got*Message` wrappers                       |
 | [`no-child-message-construction-in-root`](#no-child-message-construction-in-root)           | parent code directly calling `Child.Message.SomeVariant(...)`                 |
@@ -92,6 +96,7 @@ Some rules intentionally activate only in certain file roles:
 | [`foldkit-primitives-declared-in-role-files`](#foldkit-primitives-declared-in-role-files)   | Messages, Commands, or Subscriptions declared outside their role files        |
 | [`no-hand-rolled-command-struct`](#no-hand-rolled-command-struct)                           | object literals shaped like raw Foldkit Command structs                       |
 | [`no-empty-object-tagged-call`](#no-empty-object-tagged-call)                               | `Idle({})` instead of `Idle()`                                                |
+| [`prefer-callable-message-constructor`](#prefer-callable-message-constructor)               | typed or cast Message object literals instead of callable constructors        |
 | [`no-spread-in-evo`](#no-spread-in-evo)                                                     | object spread inside an `evo` updater                                         |
 | [`prefer-evo-over-model-spread`](#prefer-evo-over-model-spread)                             | `{ ...model, ... }` in update functions                                       |
 | [`no-explicit-command-type-annotation`](#no-explicit-command-type-annotation)               | redundant `: Command<...>` annotations                                        |
@@ -137,6 +142,34 @@ type Msg = { _tag: 'LoadedUser' } | { _tag: 'Saved' } | { _tag: 'ClickedUser' };
 ```
 
 This makes the `update` switch read as a history of user and runtime events instead of commands to perform.
+
+### `no-noop-message`
+
+Do not define catch-all `NoOp` Messages. Name the event that happened instead.
+
+```ts
+// ❌
+const NoOp = m('NoOp');
+
+// ✅
+const ClickedSave = m('ClickedSave');
+```
+
+A specific event name keeps update branches, traces, and DevTools output meaningful.
+
+### `message-binding-matches-tag`
+
+A Message binding name must match the string tag passed to `m(...)`.
+
+```ts
+// ❌
+const ClickedSave = m('ClickedSubmit');
+
+// ✅
+const ClickedSubmit = m('ClickedSubmit');
+```
+
+This prevents renames from leaving misleading trace names behind.
 
 ### `no-changed-message-prefix`
 
@@ -188,6 +221,55 @@ type Msg = { _tag: 'CompletedFocusInput' };
 ```
 
 The Message and Command names stay mechanically linked, so `grep CompletedFocusInput` and `grep FocusInput` both point at the same behavior.
+
+### `got-submodel-message-name`
+
+Messages that wrap child output with `message: Child.Message` must use the `Got*Message` convention.
+
+```ts
+import * as Child from './child';
+
+// ❌
+const ChildChanged = m('ChildChanged', {
+	message: Child.Message
+});
+
+// ✅
+const GotChildMessage = m('GotChildMessage', {
+	message: Child.Message
+});
+```
+
+This keeps every submodel boundary recognizable in traces and parent update code.
+
+### `got-prefix-requires-submodel-payload`
+
+Reserve the `Got*` prefix for submodel wrappers. A `Got*` Message must include a `message` payload that references a child `*.Message` schema.
+
+```ts
+import * as Child from './child';
+
+// ❌ Got is reserved for submodel wrappers.
+const GotWeather = m('GotWeather', {
+	temperature: S.Number
+});
+
+// ✅ Use a non-Got name for command results.
+const ReceivedWeather = m('ReceivedWeather', {
+	temperature: S.Number
+});
+
+// ❌ Missing `message: Child.Message`.
+const GotChildMessage = m('GotChildMessage', {
+	id: S.String
+});
+
+// ✅
+const GotChildMessage = m('GotChildMessage', {
+	id: S.String,
+	message: Child.Message
+});
+```
 
 ### `got-wrapper-carries-only-routing`
 
@@ -440,6 +522,26 @@ return Failed({});
 const initial = Idle();
 return Failed();
 ```
+
+### `prefer-callable-message-constructor`
+
+Do not construct Messages by typing or casting `_tag` object literals. Use the callable Message constructor instead.
+
+```ts
+const ClickedSave = m('ClickedSave');
+const Message = S.Union([ClickedSave]);
+type Message = typeof Message.Type;
+
+// ❌
+const badMessage: Message = {
+	_tag: 'ClickedSave'
+};
+
+// ✅
+const goodMessage = ClickedSave();
+```
+
+Callable constructors keep Message construction aligned with the schema definition.
 
 ### `no-spread-in-evo`
 

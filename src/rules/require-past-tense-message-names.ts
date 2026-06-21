@@ -146,7 +146,9 @@ const rule: CreateRule = Rule.define({
 		return Visitor.on('CallExpression', (node) =>
 			pipe(
 				mTagFromCall(node),
-				Option.filter((tag) => !startsWithPastTensePrefix(tag)),
+				Option.filter(
+					(tag) => tag !== 'NoOp' && !startsWithPastTensePrefix(tag)
+				),
 				Option.match({
 					onNone: () => Effect.void,
 					onSome: (tag) =>

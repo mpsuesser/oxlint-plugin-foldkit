@@ -13,6 +13,14 @@ describe('no-noop-message', () => {
 		expect(result[0]?.diagnostic.message).toContain('NoOp');
 	});
 
+	it('flags the `Noop` and `NoOperation` spellings', () => {
+		for (const tag of ['Noop', 'NoOperation']) {
+			const result = Testing.runRule(rule, 'CallExpression', m(tag));
+			expect(result).toHaveLength(1);
+			expect(result[0]?.diagnostic.message).toContain(tag);
+		}
+	});
+
 	it('allows event-specific Message names', () => {
 		const result = Testing.runRule(
 			rule,

@@ -194,6 +194,155 @@ const containsCatch = (root: unknown): boolean => {
 const appliedArgumentContainsCatch = (call: ESTree.CallExpression): boolean =>
 	pipe(call.arguments, Arr.some(containsCatch));
 
+type ProgramLike = {
+	readonly type: string;
+	readonly body: ReadonlyArray<unknown>;
+};
+
+const isProgramLike = (value: unknown): value is ProgramLike =>
+	P.isObject(value) &&
+	'type' in value &&
+	value.type === 'Program' &&
+	'body' in value &&
+	Array.isArray(value.body);
+
+/** Walk `parent` links from a node up to the enclosing `Program`, if reachable. */
+const findProgram = (node: unknown): Option.Option<ProgramLike> => {
+	let current: unknown = node;
+	for (let depth = 0; depth < 1000; depth += 1) {
+		if (isProgramLike(current)) return Option.some(current);
+		if (!P.isObject(current) || !('parent' in current))
+			return Option.none();
+		current = current.parent;
+	}
+	return Option.none();
+};
+
+/** Collect the names of every identifier-callee call within an AST subtree. */
+const collectCalledIdentifierNames = (
+	root: unknown,
+	acc: Set<string>
+): void => {
+	if (!P.isObject(root)) return;
+	if (
+		'type' in root &&
+		root.type === 'CallExpression' &&
+		'callee' in root &&
+		isIdentifierLike(root.callee)
+	) {
+		acc.add(root.callee.name);
+	}
+	pipe(
+		Object.entries(root),
+		Arr.forEach(([key, child]) => {
+			if (key === 'parent') return;
+			if (Array.isArray(child)) {
+				pipe(
+					child,
+					Arr.forEach((c) => collectCalledIdentifierNames(c, acc))
+				);
+			} else {
+				collectCalledIdentifierNames(child, acc);
+			}
+		})
+	);
+};
+
+const declaratorLike = (value: unknown): Option.Option<unknown> => {
+	if (!P.isObject(value) || !('type' in value)) return Option.none();
+	// Unwrap `export const/function …`.
+	if (value.type === 'ExportNamedDeclaration' && 'declaration' in value) {
+		return declaratorLike(value.declaration);
+	}
+	return Option.some(value);
+};
+
+/**
+ * Resolve a top-level `function name(){}` or `const name = (…) => …` body from
+ * the module Program, so one level of local-function indirection can be
+ * inspected for a catch.
+ */
+const topLevelDeclBody = (
+	program: ProgramLike,
+	name: string
+): Option.Option<unknown> =>
+	pipe(
+		program.body,
+		Arr.findFirst((statement) =>
+			pipe(
+				declaratorLike(statement),
+				Option.flatMap((decl) => {
+					if (!P.isObject(decl) || !('type' in decl)) {
+						return Option.none();
+					}
+					if (
+						decl.type === 'FunctionDeclaration' &&
+						'id' in decl &&
+						isIdentifierLike(decl.id) &&
+						decl.id.name === name &&
+						'body' in decl
+					) {
+						return Option.some(decl.body);
+					}
+					if (
+						decl.type === 'VariableDeclaration' &&
+						'declarations' in decl &&
+						Array.isArray(decl.declarations)
+					) {
+						return pipe(
+							decl.declarations,
+							Arr.findFirst(
+								(d): d is { readonly init: unknown } =>
+									P.isObject(d) &&
+									'id' in d &&
+									isIdentifierLike(d.id) &&
+									d.id.name === name &&
+									'init' in d &&
+									d.init !== null
+							),
+							Option.map((d) => d.init)
+						);
+					}
+					return Option.none();
+				})
+			)
+		)
+	);
+
+/**
+ * True when the applied Effect body calls a locally-defined function whose own
+ * body contains an `Effect.catch*`/`Effect.match*` — i.e. the catch is extracted
+ * into a helper instead of inlined. Follows one level of indirection; if the
+ * helper can't be resolved in this Program, returns false (keep flagging).
+ */
+const appliedCallsLocalCatcher = (call: ESTree.CallExpression): boolean => {
+	const names = new Set<string>();
+	pipe(
+		call.arguments,
+		Arr.forEach((arg) => collectCalledIdentifierNames(arg, names))
+	);
+	if (names.size === 0) return false;
+	return pipe(
+		findProgram(call),
+		Option.match({
+			onNone: () => false,
+			onSome: (program) =>
+				pipe(
+					Array.from(names),
+					Arr.some((name) =>
+						pipe(
+							topLevelDeclBody(program, name),
+							Option.match({
+								onNone: () => false,
+								onSome: containsCatch
+							})
+						)
+					)
+				)
+		})
+	);
+};
+
 const failedList = (defineCall: ESTree.CallExpression): string =>
 	pipe(failedResultNames(defineCall), Arr.join(', '));
 
@@ -220,7 +369,11 @@ const rule: CreateRule = Rule.define({
 			return pipe(
 				appliedCommandDefine(node),
 				Option.filter(hasFailedResult),
-				Option.filter(() => !appliedArgumentContainsCatch(node)),
+				Option.filter(
+					() =>
+						!appliedArgumentContainsCatch(node) &&
+						!appliedCallsLocalCatcher(node)
+				),
 				Option.match({
 					onNone: () => Effect.void,
 					onSome: (defineCall) =>

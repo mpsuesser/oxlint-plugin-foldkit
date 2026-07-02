@@ -63,6 +63,30 @@ describe('require-past-tense-message-names', () => {
 		expect(flag(tag)).toHaveLength(0);
 	});
 
+	// ── regression: real past-tense UI verbs must not false-positive ──
+	it.each([
+		'FlippedCard',
+		'RenderedDiagrams',
+		'ZoomedIn',
+		'PinnedNote',
+		'UnpinnedNote',
+		'ArchivedThread',
+		'RestoredDraft',
+		'FilteredResults',
+		'SortedColumn',
+		'SearchedLibrary',
+		'HighlightedRange',
+		'RevealedAnswer'
+	])('allows `m("%s")`', (tag) => {
+		expect(flag(tag)).toHaveLength(0);
+	});
+
+	it('still flags present-tense `m("StartPractice")`', () => {
+		const result = flag('StartPractice');
+		expect(result).toHaveLength(1);
+		expect(result[0]?.diagnostic.message).toContain('StartPractice');
+	});
+
 	// ── genuine noun-first tags still flag after the allowlist grew ──
 	it.each(['MentionCommitted', 'JotspotMutated', 'PiRuntimeTextCopied'])(
 		'flags noun-first `m("%s")`',

@@ -129,6 +129,73 @@ describe('command-failed-result-requires-catch', () => {
 		expect(result).toHaveLength(0);
 	});
 
+	// ── helper-extracted catch (one level of local indirection) ──
+	const arrowCalling = (fnName: string) =>
+		Testing.arrowFn(Testing.callExpr(fnName, [Testing.id('args')]), [
+			Testing.id('args')
+		]);
+
+	it('does not flag when the catch is extracted into a local helper', () => {
+		const defineCall = failedDefine();
+		const applied = applyDefine(defineCall, arrowCalling('tasksInto'));
+		const helper = Testing.varDecl(
+			'const',
+			'tasksInto',
+			Testing.arrowFn(effectWithCatch('catch'))
+		);
+		const prog = Testing.program([helper, Testing.exprStmt(applied)]);
+		Object.defineProperty(applied, 'parent', { value: prog });
+		const result = Testing.runRule(rule, 'CallExpression', applied);
+		expect(result).toHaveLength(0);
+	});
+
+	it('does not flag an inline catch in the applied Effect', () => {
+		const defineCall = failedDefine();
+		const applied = applyDefine(defineCall, effectWithCatch('catchAll'));
+		const result = Testing.runRule(rule, 'CallExpression', applied);
+		expect(result).toHaveLength(0);
+	});
+
+	it('flags when neither the applied Effect nor the called helper catches', () => {
+		const defineCall = failedDefine();
+		const applied = applyDefine(defineCall, arrowCalling('tasksInto'));
+		const helper = Testing.varDecl(
+			'const',
+			'tasksInto',
+			Testing.arrowFn(effectGen())
+		);
+		const prog = Testing.program([helper, Testing.exprStmt(applied)]);
+		Object.defineProperty(applied, 'parent', { value: prog });
+		const result = Testing.runRule(rule, 'CallExpression', applied);
+		expect(result).toHaveLength(1);
+		expect(result[0]?.diagnostic.message).toContain('FailedFetchUser');
+	});
+
+	it('flags when the called helper cannot be resolved locally', () => {
+		const defineCall = failedDefine();
+		const applied = applyDefine(defineCall, arrowCalling('unknownHelper'));
+		const result = Testing.runRule(rule, 'CallExpression', applied);
+		expect(result).toHaveLength(1);
+		expect(result[0]?.diagnostic.message).toContain('FailedFetchUser');
+	});
+
+	it('resolves a helper declared as a top-level function', () => {
+		const defineCall = failedDefine();
+		const applied = applyDefine(defineCall, arrowCalling('tasksInto'));
+		const helper = {
+			type: 'FunctionDeclaration',
+			id: Testing.id('tasksInto'),
+			params: [],
+			body: Testing.blockStmt([
+				Testing.returnStmt(effectWithCatch('catchTag'))
+			])
+		};
+		const prog = Testing.program([helper, Testing.exprStmt(applied)]);
+		Object.defineProperty(applied, 'parent', { value: prog });
+		const result = Testing.runRule(rule, 'CallExpression', applied);
+		expect(result).toHaveLength(0);
+	});
+
 	it('ignores unrelated calls', () => {
 		const result = Testing.runRule(
 			rule,

@@ -91,6 +91,57 @@ describe('no-spread-in-evo', () => {
 		expect(result).toHaveLength(0);
 	});
 
+	it('does not flag spread combined with a computed key (dynamic record update)', () => {
+		// `expanded: (x) => ({ ...x, [slug]: !v })` — a computed-key update that a
+		// static nested `evo` cannot express, so the spread is legitimate.
+		const spreadPlusComputed = {
+			type: 'ObjectExpression',
+			properties: [
+				{
+					type: 'SpreadElement',
+					argument: Testing.id('x')
+				},
+				{
+					type: 'Property',
+					key: Testing.id('slug'),
+					value: Testing.unaryExpr('!', Testing.id('v')),
+					computed: true
+				}
+			]
+		};
+		const result = Testing.runRule(
+			rule,
+			'CallExpression',
+			evoCall(updaterField('expanded', spreadPlusComputed))
+		);
+		expect(result).toHaveLength(0);
+	});
+
+	it('still flags spread combined with only static keys', () => {
+		const spreadPlusStatic = {
+			type: 'ObjectExpression',
+			properties: [
+				{
+					type: 'SpreadElement',
+					argument: Testing.memberExpr('model', 'f')
+				},
+				{
+					type: 'Property',
+					key: Testing.id('y'),
+					value: Testing.numLiteral(1),
+					computed: false
+				}
+			]
+		};
+		const result = Testing.runRule(
+			rule,
+			'CallExpression',
+			evoCall(updaterField('f', spreadPlusStatic))
+		);
+		expect(result).toHaveLength(1);
+		expect(result[0]?.diagnostic.message).toContain('field `f`');
+	});
+
 	it('does not flag a non-`evo` call with the same shape', () => {
 		const innerObj = Testing.objectExprWithSpread(
 			Testing.memberExpr('model', 'f')

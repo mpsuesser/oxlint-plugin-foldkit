@@ -15,6 +15,17 @@ const objectExprHasSpread = (obj: ESTree.ObjectExpression): boolean =>
 		Arr.some((p) => p.type === 'SpreadElement')
 	);
 
+/**
+ * A computed property (`{ [key]: v }`) can't be expressed by a static
+ * nested-`evo` rewrite, so `{ ...x, [key]: v }` is a legitimate dynamic
+ * record update rather than the plain static-key merge this rule replaces.
+ */
+const objectExprHasComputedKey = (obj: ESTree.ObjectExpression): boolean =>
+	pipe(
+		obj.properties,
+		Arr.some((p) => p.type === 'Property' && p.computed === true)
+	);
+
 const arrowBodyObject = (
 	arrow: ESTree.ArrowFunctionExpression
 ): Option.Option<ESTree.ObjectExpression> => {
@@ -59,7 +70,11 @@ const extractFindings = (
 				return Result.failVoid;
 			return pipe(
 				arrowBodyObject(prop.value),
-				Option.filter(objectExprHasSpread),
+				Option.filter(
+					(obj) =>
+						objectExprHasSpread(obj) &&
+						!objectExprHasComputedKey(obj)
+				),
 				Option.match({
 					onNone: () => Result.failVoid,
 					onSome: (obj) =>

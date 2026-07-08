@@ -8,7 +8,9 @@ An opinionated [oxlint](https://oxc.rs/docs/guide/usage/linter) plugin for [Fold
 
 The plugin focuses on the parts of Foldkit code that TypeScript cannot fully protect on its own: message grammar, command identity, pure update/view boundaries, route registration, keyed view identity, accessibility wiring, resource lifecycles, subscriptions, and Story/Scene testing patterns.
 
-> This is an unofficial, personal ruleset published under `@mpsuesser/*` so the canonical `oxlint-plugin-foldkit` / `foldkit/*` namespace remains available for the Foldkit project itself.
+> **Disclaimer:** Foldkit now maintains its own official oxlint plugin. If you found this package while looking for Foldkit lint rules, you should probably use the official plugin instead: <https://foldkit.dev/tooling/oxlint-plugin>.
+>
+> This is an unofficial, personal ruleset published under `@mpsuesser/*` and is not the canonical Foldkit plugin.
 
 The package currently ships **45 rules**. They are implemented with the [`effect-oxlint`](https://github.com/mpsuesser/effect-oxlint) SDK and run as standard oxlint JavaScript plugin rules.
 

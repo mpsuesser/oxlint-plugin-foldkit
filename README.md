@@ -1,5 +1,8 @@
 # oxlint-plugin-foldkit
 
+> [!WARNING]
+> **Permanently retired on August 15, 2026.** This unofficial, experimental plugin is unmaintained. It will receive no support, compatibility updates, security fixes, or new releases. Existing source and packages remain available for historical use, but new and existing projects should migrate to Foldkit's maintained official plugin: <https://foldkit.dev/tooling/oxlint-plugin>.
+
 [![npm](https://img.shields.io/npm/v/@mpsuesser/oxlint-plugin-foldkit)](https://www.npmjs.com/package/@mpsuesser/oxlint-plugin-foldkit)
 [![JSR](https://jsr.io/badges/@mpsuesser/oxlint-plugin-foldkit)](https://jsr.io/@mpsuesser/oxlint-plugin-foldkit)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
@@ -7,10 +10,6 @@
 An opinionated [oxlint](https://oxc.rs/docs/guide/usage/linter) plugin for [Foldkit](https://github.com/foldkit/foldkit) that codifies framework conventions as lint rules.
 
 The plugin focuses on the parts of Foldkit code that TypeScript cannot fully protect on its own: message grammar, command identity, pure update/view boundaries, route registration, keyed view identity, accessibility wiring, resource lifecycles, subscriptions, and Story/Scene testing patterns.
-
-> **Disclaimer:** Foldkit now maintains its own official oxlint plugin. If you found this package while looking for Foldkit lint rules, you should probably use the official plugin instead: <https://foldkit.dev/tooling/oxlint-plugin>.
->
-> This is an unofficial, personal ruleset published under `@mpsuesser/*` and is not the canonical Foldkit plugin.
 
 The package currently ships **45 rules**. They are implemented with the [`effect-oxlint`](https://github.com/mpsuesser/effect-oxlint) SDK and run as standard oxlint JavaScript plugin rules.
 

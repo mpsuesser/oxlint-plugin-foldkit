@@ -1,5 +1,11 @@
 # Changelog
 
+## Retired - 2026-08-15
+
+- Permanently retired this unofficial, experimental plugin. It will receive no support, compatibility updates, security fixes, or new releases.
+- Direct new and existing users to Foldkit's maintained official plugin: <https://foldkit.dev/tooling/oxlint-plugin>.
+- Preserve the source, documentation, release history, and existing package versions for historical use.
+
 ## 0.5.0 — Foldkit parity rules
 
 ### Added
